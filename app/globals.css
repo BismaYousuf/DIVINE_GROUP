@@ -146,7 +146,7 @@
 
 /* Section vertical rhythm */
 @utility section-y {
-  padding-block: clamp(6rem, 14vh, 12.5rem);
+  padding-block: clamp(4.5rem, 10vh, 8.5rem);
 }
 
 /* ============================================================================

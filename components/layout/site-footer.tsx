@@ -98,12 +98,12 @@ export function SiteFooter() {
       {/* Oversized wordmark, clipped by the footer's bottom edge. */}
       <Parallax
         speed={0.4}
-        className="pointer-events-none absolute inset-x-0 -bottom-[0.18em] select-none"
+        className="pointer-events-none absolute inset-x-0 -bottom-[0.16em] select-none gutter"
       >
         <span
           aria-hidden
-          className="block whitespace-nowrap text-center font-display font-semibold leading-none text-paper-hi/[0.06]"
-          style={{ fontSize: "clamp(4rem, 20vw, 18rem)" }}
+          className="mx-auto block max-w-content whitespace-nowrap font-display font-semibold leading-none text-paper-hi/[0.055]"
+          style={{ fontSize: "clamp(3rem, 13vw, 11rem)" }}
         >
           Divine Group
         </span>

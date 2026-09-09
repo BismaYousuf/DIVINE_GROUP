@@ -175,7 +175,7 @@ export function Capabilities() {
           {CAPS.map((c) => (
             <div
               key={c.n}
-              className="cap-panel mx-auto flex w-full max-w-content items-center gutter py-24 motion-safe:lg:h-screen motion-safe:lg:py-0"
+              className="cap-panel mx-auto flex w-full max-w-content items-center gutter py-10 md:py-14 motion-safe:lg:h-screen motion-safe:lg:py-0"
             >
               <CapabilityPanel {...c} className="w-full" />
             </div>

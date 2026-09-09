@@ -1,7 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
-const { sendQuoteEmail } = vi.hoisted(() => ({ sendQuoteEmail: vi.fn() }));
-vi.mock("@/lib/email/send-quote-email", () => ({ sendQuoteEmail }));
+const { sendQuoteEmail, sendFullQuoteEmail } = vi.hoisted(() => ({
+  sendQuoteEmail: vi.fn(),
+  sendFullQuoteEmail: vi.fn(),
+}));
+vi.mock("@/lib/email/send-quote-email", () => ({
+  sendQuoteEmail,
+  sendFullQuoteEmail,
+}));
 vi.mock("@/lib/turnstile", () => ({
   verifyTurnstile: vi.fn().mockResolvedValue(true),
 }));
@@ -54,5 +60,74 @@ describe("POST /api/quote", () => {
     sendQuoteEmail.mockRejectedValueOnce(new Error("resend down"));
     const res = await POST(reqWith(good));
     expect(res.status).toBe(500);
+  });
+});
+
+// ---- full mode -----------------------------------------------------------------
+
+function fullReq(
+  fields: Record<string, string>,
+  files: { name: string; file: File }[] = [],
+): Request {
+  const fd = new FormData();
+  fd.set("mode", "full");
+  for (const [k, v] of Object.entries(fields)) fd.set(k, v);
+  for (const { name, file } of files) fd.set(name, file);
+  // Pass FormData straight through — avoids a slow multipart serialize/parse
+  // round-trip in the test environment when File entries are present.
+  return { formData: async () => fd } as unknown as Request;
+}
+
+const fullGood: Record<string, string> = {
+  dotNumber: "1234567",
+  companyName: "Byron Freight LLC",
+  garagingAddress: "100 Depot Rd, Springfield, IL 62701",
+  ownerName: "Ada Byron",
+  email: "ada@byronfreight.com",
+  phone: "555 123 4567",
+  coveragesNeeded: "Auto liability and cargo for eight trucks",
+  vins: JSON.stringify(["1FUJGLDR0CLBP8834", "", "", "", ""]),
+  consent: "true",
+};
+
+describe("POST /api/quote (full mode)", () => {
+  beforeEach(() => {
+    sendFullQuoteEmail.mockReset();
+    sendFullQuoteEmail.mockResolvedValue(undefined);
+  });
+
+  it("accepts a valid full submission", async () => {
+    const res = await POST(fullReq(fullGood));
+    expect(res.status).toBe(200);
+    expect(sendFullQuoteEmail).toHaveBeenCalledTimes(1);
+  });
+
+  it("rejects a non-numeric DOT number", async () => {
+    const res = await POST(fullReq({ ...fullGood, dotNumber: "12ab" }));
+    expect(res.status).toBe(400);
+    expect(sendFullQuoteEmail).not.toHaveBeenCalled();
+  });
+
+  it("rejects an oversize attachment", async () => {
+    const big = new File([new Uint8Array(2 * 1024 * 1024)], "loss-runs.pdf", {
+      type: "application/pdf",
+    });
+    const res = await POST(fullReq(fullGood, [{ name: "file_lossRuns", file: big }]));
+    expect(res.status).toBe(400);
+    expect(sendFullQuoteEmail).not.toHaveBeenCalled();
+  });
+
+  it("rejects a disallowed file type", async () => {
+    const bad = new File([new Uint8Array(16)], "payload.exe", {
+      type: "application/x-msdownload",
+    });
+    const res = await POST(fullReq(fullGood, [{ name: "file_ownerCdl", file: bad }]));
+    expect(res.status).toBe(400);
+  });
+
+  it("silently drops a honeypot hit", async () => {
+    const res = await POST(fullReq({ ...fullGood, company_website: "spam" }));
+    expect(res.status).toBe(200);
+    expect(sendFullQuoteEmail).not.toHaveBeenCalled();
   });
 });

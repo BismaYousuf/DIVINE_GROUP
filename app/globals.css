@@ -1,26 +1,150 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================================
+   Divine Group — design tokens (Tailwind v4, CSS-first)
+   Lineage: Precision Instrument + Editorial Freight + Nocturne Logistics
+   ========================================================================== */
+
+@theme {
+  /* -- Color ---------------------------------------------------------------- */
+  --color-ink: #0b0b0c; /* primary text, ink surfaces */
+  --color-paper: #f4f2ed; /* primary background (warm, not pure white) */
+  --color-paper-hi: #fbfaf7;
+  --color-graphite: #6b6b66; /* secondary text */
+  --color-hairline: #0b0b0c24; /* visible grid lines, rules (~14% ink) */
+  --color-fog: #e4e1d8; /* subtle fills, hover grounds */
+  --color-accent: #d64222; /* signal ember */
+  --color-accent-press: #b5331a;
+  --color-night: #0e1113; /* Nocturne band background */
+  --color-night-fg: #e8e6e1;
+  --color-amber: #f2a83b; /* micro-highlights on dark surfaces only */
+
+  /* -- Type families (next/font vars resolved here) ----------------------- */
+  --font-display: var(--font-clash), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-general), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-serif: var(--font-instrument), Georgia, serif;
+
+  /* -- Fluid type scale --------------------------------------------------- */
+  --text-display-xl: clamp(3rem, 9vw, 8.5rem);
+  --text-display-xl--line-height: 0.95;
+  --text-display-xl--letter-spacing: -0.03em;
+
+  --text-display-l: clamp(2.5rem, 5.5vw, 5rem);
+  --text-display-l--line-height: 1;
+  --text-display-l--letter-spacing: -0.025em;
+
+  --text-display-m: clamp(2rem, 3.5vw, 3.25rem);
+  --text-display-m--line-height: 1.05;
+  --text-display-m--letter-spacing: -0.02em;
+
+  --text-heading: 1.5rem;
+  --text-heading--line-height: 1.15;
+  --text-heading--letter-spacing: -0.01em;
+
+  --text-body-l: 1.25rem;
+  --text-body-l--line-height: 1.5;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.6;
+
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.14em;
+
+  --text-caption: 0.875rem;
+  --text-caption--line-height: 1.45;
+
+  /* -- Motion ------------------------------------------------------------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* -- Layout ----------------------------------------------------------- */
+  --container-content: 90rem; /* 1440px */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================================
+   Base layer
+   ========================================================================== */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    color-scheme: light;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-paper-hi);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  /* Tabular figures wherever numbers should align */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: "tnum" 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ============================================================================
+   Utilities
+   ========================================================================== */
+
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-label);
+  line-height: var(--text-label--line-height);
+  letter-spacing: var(--text-label--letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Horizontal page padding — clamps with viewport */
+@utility gutter {
+  padding-inline: clamp(1.25rem, 6vw, 6rem);
+}
+
+/* Section vertical rhythm */
+@utility section-y {
+  padding-block: clamp(6rem, 14vh, 12.5rem);
 }

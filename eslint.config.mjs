@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Project: don't lint docs or vendored agent skills.
+    ".claude/**",
+    "docs/**",
   ]),
 ]);
 

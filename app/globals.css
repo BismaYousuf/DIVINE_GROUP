@@ -173,6 +173,15 @@
     transform: translateX(100%);
   }
 }
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-120%);
+  }
+  60%,
+  100% {
+    transform: translateY(360%);
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   [data-state] {

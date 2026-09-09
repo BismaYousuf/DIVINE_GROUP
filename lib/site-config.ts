@@ -98,6 +98,71 @@ export const siteConfig = {
 export type NavItem = (typeof siteConfig.nav)[number];
 export type CoverageLine = (typeof siteConfig.coverageLines)[number];
 
+/** Service categories for the Services page. CLIENT TO CONFIRM. */
+export const serviceCategories = [
+  {
+    title: "Trucking Insurance",
+    blurb:
+      "Auto liability, motor truck cargo, physical damage and specialty programs for owner-operators and fleets.",
+    href: "/services/trucking-insurance",
+  },
+  {
+    title: "Freight Broker Insurance",
+    blurb:
+      "Contingent cargo, general liability, broker bonds, and errors & omissions for freight brokers.",
+    href: "/services#freight-broker",
+  },
+  {
+    title: "Borderless Coverage",
+    blurb:
+      "Insurance that follows your freight across the United States, Mexico and Canada.",
+    href: "/services#borderless",
+  },
+  {
+    title: "Commercial Insurance",
+    blurb:
+      "General liability, commercial property, business auto, workers' comp and umbrella for the wider business.",
+    href: "/services#commercial",
+  },
+  {
+    title: "Risk Management",
+    blurb:
+      "Safety and compliance programs, CSA score guidance, and loss forecasting.",
+    href: "/services#risk",
+  },
+  {
+    title: "Usage-Based Solutions",
+    blurb:
+      "Telematics and mileage-based programs for pay-as-you-drive coverage.",
+    href: "/services#usage",
+  },
+] as const;
+
+export const truckingCoverageLinks = [
+  "Auto Liability",
+  "Motor Truck Cargo",
+  "Physical Damage",
+  "General Liability",
+  "Excess & Umbrella",
+  "Non-Trucking Liability & Bobtail",
+  "Occupational Accident (OCC/ACC)",
+] as const;
+
+export const truckingPrograms = [
+  "New venture",
+  "High-risk",
+  "Owner-operator",
+  "Box trucks",
+  "Bulk haulers",
+  "Couriers",
+  "Dump operations",
+  "Haz-mat carriers",
+  "Hot-shots",
+  "LTL",
+  "Tow truck operations",
+  "Warehouse operations",
+] as const;
+
 /** US states + DC for the quote form select. */
 export const US_STATES = [
   "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "HI", "ID",

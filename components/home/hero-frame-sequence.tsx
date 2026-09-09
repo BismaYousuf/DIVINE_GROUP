@@ -1,0 +1,135 @@
+"use client";
+
+import NextImage from "next/image";
+import { useEffect, useRef, useState } from "react";
+import { ScrollTrigger, registerGsap } from "@/components/motion/gsap";
+import {
+  HERO_FRAME_COUNT,
+  HERO_FRAME_PIN_VH,
+  heroFramePath,
+} from "@/lib/hero-frames";
+
+/**
+ * Canvas frame-by-frame scrub of the hero. Pins the hero section for
+ * HERO_FRAME_PIN_VH viewport-heights and advances the frame with scroll.
+ * Shows the static poster until every frame has decoded. Only mounted on
+ * desktop with motion allowed — see HeroMedia.
+ */
+export function HeroFrameSequence() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const wrap = wrapRef.current;
+    const canvas = canvasRef.current;
+    if (!wrap || !canvas || HERO_FRAME_COUNT < 2) return;
+    registerGsap();
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    const section = wrap.closest("section") ?? wrap;
+    const images: HTMLImageElement[] = [];
+    const state = { frame: 0 };
+    let loaded = 0;
+    let mounted = true;
+
+    const draw = () => {
+      const img = images[Math.round(state.frame)];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+      const cw = canvas.width;
+      const ch = canvas.height;
+      const ir = img.naturalWidth / img.naturalHeight;
+      const cr = cw / ch;
+      let dw: number, dh: number, dx: number, dy: number;
+      if (ir > cr) {
+        dh = ch;
+        dw = ch * ir;
+        dx = (cw - dw) / 2;
+        dy = 0;
+      } else {
+        dw = cw;
+        dh = cw / ir;
+        dx = 0;
+        dy = (ch - dh) / 2;
+      }
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.drawImage(img, dx, dy, dw, dh);
+    };
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(wrap.clientWidth * dpr);
+      canvas.height = Math.round(wrap.clientHeight * dpr);
+      draw();
+    };
+
+    for (let i = 0; i < HERO_FRAME_COUNT; i++) {
+      const img = document.createElement("img");
+      img.decoding = "async";
+      img.onload = () => {
+        if (!mounted) return;
+        loaded += 1;
+        setProgress(loaded / HERO_FRAME_COUNT);
+        if (loaded === 1) resize();
+        if (loaded === HERO_FRAME_COUNT) draw();
+      };
+      img.src = heroFramePath(i);
+      images[i] = img;
+    }
+
+    const st = ScrollTrigger.create({
+      trigger: section,
+      start: "top top",
+      end: `+=${window.innerHeight * HERO_FRAME_PIN_VH}`,
+      pin: true,
+      scrub: 0.5,
+      invalidateOnRefresh: true,
+      onUpdate: (self) => {
+        state.frame = self.progress * (HERO_FRAME_COUNT - 1);
+        draw();
+      },
+    });
+
+    window.addEventListener("resize", resize);
+    resize();
+
+    return () => {
+      mounted = false;
+      window.removeEventListener("resize", resize);
+      st.kill();
+      images.forEach((im) => {
+        im.onload = null;
+        im.src = "";
+      });
+    };
+  }, []);
+
+  return (
+    <div ref={wrapRef} className="absolute inset-0 z-0">
+      {/* poster until frames decode */}
+      <NextImage
+        src="/media/hero.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="object-cover filter-[grayscale(1)_contrast(1.08)_brightness(0.82)]"
+      />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full"
+        style={{ opacity: progress >= 1 ? 1 : 0, transition: "opacity .4s" }}
+      />
+      <div className="absolute inset-0 bg-ink/55" />
+      <div className="absolute inset-0 bg-accent/10 mix-blend-overlay" />
+      <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/25 to-ink/45" />
+      {progress > 0 && progress < 1 ? (
+        <p className="mono-label tnum absolute bottom-6 left-1/2 -translate-x-1/2 text-paper-hi/40">
+          Loading {Math.round(progress * 100)}%
+        </p>
+      ) : null}
+    </div>
+  );
+}

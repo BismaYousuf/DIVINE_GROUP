@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "ghost" | "paper";
 
 const base =
-  "group relative inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-[3px] px-7 font-sans text-[0.9375rem] font-medium tracking-tight transition-colors duration-200 select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent";
+  "group relative inline-flex h-12 items-center justify-center gap-2 whitespace-nowrap rounded-[3px] px-7 font-sans text-[0.9375rem] font-medium tracking-tight transition-colors duration-200 select-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:pointer-events-none disabled:opacity-55";
 
 const variants: Record<Variant, string> = {
   primary:
@@ -28,6 +28,7 @@ type MagneticButtonProps = {
   type?: "button" | "submit";
   variant?: Variant;
   className?: string;
+  disabled?: boolean;
   "aria-label"?: string;
 };
 
@@ -38,6 +39,7 @@ export function MagneticButton({
   type = "button",
   variant = "primary",
   className,
+  disabled,
   ...rest
 }: MagneticButtonProps) {
   const ref = useRef<HTMLAnchorElement & HTMLButtonElement>(null);
@@ -46,7 +48,7 @@ export function MagneticButton({
   useGSAP(
     () => {
       const el = ref.current;
-      if (!el || !ready || reduced || !finePointer) return;
+      if (!el || !ready || reduced || !finePointer || disabled) return;
 
       const xTo = gsap.quickTo(el, "x", { duration: 0.4, ease: EASE.micro });
       const yTo = gsap.quickTo(el, "y", { duration: 0.4, ease: EASE.micro });
@@ -68,7 +70,7 @@ export function MagneticButton({
         el.removeEventListener("pointerleave", reset);
       };
     },
-    { dependencies: [ready, reduced, finePointer] },
+    { dependencies: [ready, reduced, finePointer, disabled] },
   );
 
   const cls = cn(base, variants[variant], className);
@@ -81,7 +83,14 @@ export function MagneticButton({
     );
   }
   return (
-    <button ref={ref} type={type} onClick={onClick} className={cls} {...rest}>
+    <button
+      ref={ref}
+      type={type}
+      onClick={onClick}
+      disabled={disabled}
+      className={cls}
+      {...rest}
+    >
       {children}
     </button>
   );

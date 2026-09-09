@@ -8,6 +8,7 @@ import {
   type SelectHTMLAttributes,
   type ReactNode,
 } from "react";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ---------- shared bits ---------------------------------------------------- */
@@ -131,16 +132,23 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       <Label htmlFor={fieldId} required={required}>
         {label}
       </Label>
-      <select
-        ref={ref}
-        id={fieldId}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={error ? errId : undefined}
-        className={cn(controlBase, "mt-2 appearance-none", className)}
-        {...props}
-      >
-        {children}
-      </select>
+      <div className="relative">
+        <select
+          ref={ref}
+          id={fieldId}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errId : undefined}
+          className={cn(controlBase, "mt-2 appearance-none pr-7", className)}
+          {...props}
+        >
+          {children}
+        </select>
+        <ChevronDown
+          aria-hidden
+          strokeWidth={1.5}
+          className="pointer-events-none absolute right-0 top-1/2 size-4 -translate-y-1/2 text-graphite"
+        />
+      </div>
       <Error id={errId}>{error}</Error>
     </div>
   );

@@ -1,6 +1,7 @@
 import { Hero } from "@/components/home/hero";
 import { PositioningStatement } from "@/components/home/positioning-statement";
 import { Capabilities } from "@/components/home/capabilities";
+import { CoverageBand } from "@/components/home/coverage-band";
 
 export default function Home() {
   return (
@@ -8,12 +9,13 @@ export default function Home() {
       <Hero />
       <PositioningStatement />
       <Capabilities />
+      <CoverageBand />
 
       {/* Remaining sections land in the following tasks. */}
       <section className="section-y gutter">
         <p className="max-w-[62ch] text-body-l text-graphite">
-          Next: coverage band, inline quote form, the Nocturne difference band,
-          numbers, and the closing CTA.
+          Next: inline quote form, the Nocturne difference band, numbers, and the
+          closing CTA.
         </p>
       </section>
     </>

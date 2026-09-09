@@ -1,5 +1,6 @@
 "use client";
 
+import type { Dispatch, SetStateAction } from "react";
 import { Plus, Minus } from "lucide-react";
 import type { UseFormRegister } from "react-hook-form";
 import { Input } from "@/components/ui/field";
@@ -13,7 +14,7 @@ export function VinRepeater({
 }: {
   register: UseFormRegister<QuoteInput>;
   count: number;
-  setCount: (n: number) => void;
+  setCount: Dispatch<SetStateAction<number>>;
   errors?: Array<string | undefined>;
 }) {
   return (
@@ -35,7 +36,7 @@ export function VinRepeater({
       <div className="mt-5 flex items-center gap-6">
         <button
           type="button"
-          onClick={() => setCount(count + 1)}
+          onClick={() => setCount((c) => c + 1)}
           className="mono-label inline-flex items-center gap-2 text-ink transition-colors hover:text-accent"
         >
           <Plus className="size-4" strokeWidth={1.5} />
@@ -44,7 +45,7 @@ export function VinRepeater({
         {count > 5 ? (
           <button
             type="button"
-            onClick={() => setCount(count - 1)}
+            onClick={() => setCount((c) => c - 1)}
             className="mono-label inline-flex items-center gap-2 text-graphite transition-colors hover:text-ink"
           >
             <Minus className="size-4" strokeWidth={1.5} />

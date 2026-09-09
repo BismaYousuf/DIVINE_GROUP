@@ -16,11 +16,11 @@ export function PageHero({
   return (
     <section
       className={cn(
-        "relative overflow-hidden section-y",
+        "relative overflow-hidden pb-14 pt-32 md:pb-20 md:pt-44",
         night ? "bg-night text-night-fg" : "bg-paper text-ink",
       )}
     >
-      <div className="mx-auto max-w-content gutter pt-16">
+      <div className="mx-auto max-w-content gutter">
         <p
           className={cn(
             "mono-label",

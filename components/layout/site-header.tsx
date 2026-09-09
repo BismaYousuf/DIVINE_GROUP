@@ -5,7 +5,7 @@ import Link from "next/link";
 import { NavLink } from "./nav-link";
 import { MobileNav } from "./mobile-nav";
 import { MagneticButton } from "@/components/motion/magnetic-button";
-import { gsap, ScrollTrigger, useGSAP, registerGsap } from "@/components/motion/gsap";
+import { useUIStore } from "@/stores/ui-store";
 import { siteConfig } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
@@ -13,7 +13,7 @@ export function SiteHeader() {
   const ref = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [invert, setInvert] = useState(false);
+  const invert = useUIStore((s) => s.headerInverted);
 
   // Scroll position + direction (works with Lenis, which updates native scroll).
   useEffect(() => {
@@ -35,22 +35,6 @@ export function SiteHeader() {
       window.removeEventListener("scroll", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, []);
-
-  // Invert over sections marked [data-invert-header].
-  useGSAP(() => {
-    registerGsap();
-    const targets = gsap.utils.toArray<HTMLElement>("[data-invert-header]");
-    if (!targets.length) return;
-    const triggers = targets.map((el) =>
-      ScrollTrigger.create({
-        trigger: el,
-        start: "top 72px",
-        end: "bottom 72px",
-        onToggle: (self) => setInvert(self.isActive),
-      }),
-    );
-    return () => triggers.forEach((t) => t.kill());
   }, []);
 
   const onDark = !scrolled || invert;

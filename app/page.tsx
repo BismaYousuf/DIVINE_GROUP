@@ -3,6 +3,7 @@ import { PositioningStatement } from "@/components/home/positioning-statement";
 import { Capabilities } from "@/components/home/capabilities";
 import { CoverageBand } from "@/components/home/coverage-band";
 import { InlineQuote } from "@/components/home/inline-quote";
+import { DivineDifference } from "@/components/home/divine-difference";
 
 export default function Home() {
   return (
@@ -12,11 +13,12 @@ export default function Home() {
       <Capabilities />
       <CoverageBand />
       <InlineQuote />
+      <DivineDifference />
 
-      {/* Remaining sections land in the following tasks. */}
+      {/* Numbers + closing CTA land in the next task. */}
       <section className="section-y gutter">
         <p className="max-w-[62ch] text-body-l text-graphite">
-          Next: the Nocturne difference band, numbers, and the closing CTA.
+          Next: numbers, and the closing CTA.
         </p>
       </section>
     </>

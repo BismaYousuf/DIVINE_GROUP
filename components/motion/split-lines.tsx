@@ -10,6 +10,7 @@ type SplitLinesProps = {
   as?: ElementType;
   children: ReactNode;
   className?: string;
+  id?: string;
   delay?: number;
   start?: string;
   /** play immediately on mount instead of on scroll (hero headline) */
@@ -25,6 +26,7 @@ export function SplitLines({
   as: Tag = "div",
   children,
   className,
+  id,
   delay = 0,
   start = "top 85%",
   immediate = false,
@@ -73,7 +75,7 @@ export function SplitLines({
   );
 
   return (
-    <Tag ref={ref as React.Ref<HTMLElement>} className={cn(className)}>
+    <Tag id={id} ref={ref as React.Ref<HTMLElement>} className={cn(className)}>
       {children}
     </Tag>
   );

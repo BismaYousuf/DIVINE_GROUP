@@ -92,7 +92,7 @@ export default function Page() {
       </section>
 
       {/* Detail split features */}
-      <section className="flex flex-col gap-24 bg-paper py-16 md:gap-32">
+      <section className="flex flex-col gap-20 bg-paper py-8 md:gap-28">
         <SplitFeature
           label="Total coverage"
           title="Protection that reaches past the collision."

@@ -1,4 +1,3 @@
-import { Reveal } from "@/components/motion/reveal";
 import { InlineQuoteForm } from "@/components/forms/inline-quote-form";
 
 export function InlineQuote() {
@@ -24,9 +23,7 @@ export function InlineQuote() {
           </p>
         </div>
 
-        <Reveal>
-          <InlineQuoteForm />
-        </Reveal>
+        <InlineQuoteForm />
       </div>
     </section>
   );

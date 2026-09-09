@@ -89,9 +89,7 @@ export default function Page() {
               reaches the right desk faster.
             </p>
           </div>
-          <Reveal>
-            <ContactForm />
-          </Reveal>
+          <ContactForm />
         </div>
       </section>
 

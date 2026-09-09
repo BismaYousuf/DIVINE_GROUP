@@ -59,8 +59,13 @@ export function CoverageBand() {
             };
           }
 
-          // flow: reveal slabs as they enter
-          const slabs = gsap.utils.toArray<HTMLElement>("> *", t);
+          // reduced motion: leave slabs in their static, visible state
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            return;
+          }
+
+          // mobile (motion ok): reveal slabs as they enter
+          const slabs = Array.from(t.children) as HTMLElement[];
           gsap.from(slabs, {
             autoAlpha: 0,
             y: 24,
@@ -94,11 +99,11 @@ export function CoverageBand() {
         tabIndex={0}
         onKeyDown={onKeyDown}
         aria-label="Coverage lines — scroll horizontally"
-        className="relative overflow-hidden outline-none focus-visible:outline-2 focus-visible:outline-accent lg:h-screen"
+        className="relative outline-none focus-visible:outline-2 focus-visible:outline-accent motion-safe:overflow-hidden motion-safe:lg:h-screen"
       >
         <div
           ref={track}
-          className="flex flex-col will-change-transform lg:h-full lg:flex-row lg:items-stretch"
+          className="flex flex-col motion-safe:will-change-transform motion-safe:lg:h-full motion-safe:lg:flex-row motion-safe:lg:items-stretch"
         >
           <CoverageIntroSlab />
           {siteConfig.coverageLines.map((c) => (

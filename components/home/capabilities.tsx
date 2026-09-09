@@ -120,7 +120,12 @@ export function Capabilities() {
             };
           }
 
-          // flow (mobile / reduced motion): reveal each panel as it enters
+          // reduced motion: leave everything in its static, fully-visible state
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            return;
+          }
+
+          // mobile (motion ok): reveal each panel as it enters
           panels.forEach((p, i) => {
             gsap.from(p, {
               autoAlpha: 0,
@@ -163,14 +168,14 @@ export function Capabilities() {
 
       <div
         ref={stage}
-        className="relative overflow-hidden lg:h-screen"
+        className="relative motion-safe:overflow-hidden motion-safe:lg:h-screen"
       >
         <ProgressRail active={active} />
-        <div ref={track} className="lg:will-change-transform">
+        <div ref={track} className="motion-safe:lg:will-change-transform">
           {CAPS.map((c) => (
             <div
               key={c.n}
-              className="cap-panel mx-auto flex w-full max-w-content items-center gutter py-24 lg:h-screen lg:py-0"
+              className="cap-panel mx-auto flex w-full max-w-content items-center gutter py-24 motion-safe:lg:h-screen motion-safe:lg:py-0"
             >
               <CapabilityPanel {...c} className="w-full" />
             </div>

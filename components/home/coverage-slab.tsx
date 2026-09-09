@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 const SLAB =
-  "group flex h-auto w-full shrink-0 flex-col justify-center border-t border-hairline px-6 py-9 transition-colors duration-300 lg:h-full lg:w-[clamp(15rem,29vw,25rem)] lg:border-l lg:border-t-0 lg:py-16";
+  "group flex h-auto w-full shrink-0 flex-col justify-center border-t border-hairline px-6 py-9 transition-colors duration-300 motion-safe:lg:h-full motion-safe:lg:w-[clamp(15rem,29vw,25rem)] motion-safe:lg:border-l motion-safe:lg:border-t-0 motion-safe:lg:py-16";
 
 type Base = { code: string; name: string; blurb: string };
 
@@ -25,7 +25,7 @@ export function CoverageCtaSlab({ href }: { href: string }) {
   return (
     <Link
       href={href}
-      className={`${SLAB} bg-accent text-paper-hi hover:bg-accent-press lg:w-[clamp(15rem,25vw,21rem)]`}
+      className={`${SLAB} bg-accent text-paper-hi hover:bg-accent-press motion-safe:lg:w-[clamp(15rem,25vw,21rem)]`}
     >
       <span className="mono-label text-paper-hi/70">C — All</span>
       <h3 className="mt-5 font-display text-display-m font-medium leading-[1]">
@@ -44,7 +44,7 @@ export function CoverageCtaSlab({ href }: { href: string }) {
 
 export function CoverageIntroSlab() {
   return (
-    <div className="flex h-auto w-full shrink-0 flex-col justify-center px-6 py-9 lg:h-full lg:w-[clamp(18rem,32vw,30rem)] lg:py-16">
+    <div className="flex h-auto w-full shrink-0 flex-col justify-center px-6 py-9 motion-safe:lg:h-full motion-safe:lg:w-[clamp(18rem,32vw,30rem)] motion-safe:lg:py-16">
       <span className="mono-label text-graphite">02 — Coverage</span>
       <h2
         id="coverage-heading"

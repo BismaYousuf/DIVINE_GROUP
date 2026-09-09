@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import {
@@ -73,6 +74,16 @@ export function DivineDifference() {
       aria-labelledby="difference-heading"
       className="relative isolate overflow-hidden bg-night text-night-fg section-y"
     >
+      {/* atmospheric base — headlights at night */}
+      <Image
+        src="/media/night.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+        className="pointer-events-none -z-20 object-cover opacity-40 [filter:grayscale(1)_contrast(1.1)_brightness(0.7)]"
+      />
+      <div className="pointer-events-none absolute inset-0 -z-20 bg-night/50" />
+
       <div
         ref={bloomA}
         aria-hidden

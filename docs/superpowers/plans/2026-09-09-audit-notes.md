@@ -150,3 +150,40 @@ instructions in `public/media/hero-frames/README.md`.
   capabilities panels. Reads as editorial but could be denser — tighten in a polish pass.
 - Placeholder office address renders as `—` on /contact-us until real data is supplied.
 - OG image wordmark uses a Georgia stand-in for Clash Display.
+
+---
+
+# Assets + Phase 3 activation — 2026-09-09
+
+Client supplied 8 generated stills + one 4s video. Processed with `sharp` / `ffmpeg`;
+originals moved to `_source-media/` (gitignored) so they don't ship in the bundle.
+
+| File | Source | Treatment |
+|---|---|---|
+| `hero.jpg` | Semi truck on highway (2752×1536) | 2400w JPEG q64 — poster + non-desktop hero |
+| `night.jpg` | Highway at night, windshield POV | 2200w — new base layer in the Nocturne band under the amber blooms |
+| `cap-01/02/03.jpg` | dispatch office / desk+map / parked truck at night | 900×1125 `cover` (attention crop) q66 |
+| `feature-01/02.jpg` | service bay / two people reviewing paperwork | 1600×1200 q66 |
+| `og.jpg` | dry-van truck on wet asphalt | cropped 1200×630, ink gradient + composited "Divine Group" (Georgia) wordmark |
+| `hero-frames/frame_0001…0096.webp` | the 4s / 24fps / 1080p clip | `ffmpeg` every frame → 1600w WebP q72, ~25 KB each, 2.4 MB total |
+
+**Phase 3 turned on.** `HERO_FRAME_COUNT = 96`. `HeroFrameSequence` now renders on desktop
+with motion allowed.
+
+- **Pin removed.** The first attempt pinned the hero section for ~1.8 viewports; it fought
+  the `PositioningStatement` pin right after it and the two sections overlapped. Switched to
+  a **no-pin scrub** (`start: "top top"`, `end: "bottom top"`) — frames 0→95 map to the
+  hero's natural scroll-out. Verified: no overlap, positioning statement follows cleanly,
+  0 console errors.
+- Mobile / reduced-motion still get the static poster (component not mounted).
+- Next's image optimiser caches by URL — had to `rm -rf .next` once after replacing the
+  jpgs in place, since the filenames were unchanged.
+
+## Gate status
+
+`npm run typecheck` ✓ · `npm run lint` ✓ · `npm run test` (28) ✓ · `npm run build` (13 routes) ✓.
+
+## Still outstanding
+
+- `/contact-us` office address is still `—` — needs the real address in `lib/site-config.ts`.
+- Everything marked `CLIENT TO CONFIRM` (all body copy, phone, email, domain, stats).

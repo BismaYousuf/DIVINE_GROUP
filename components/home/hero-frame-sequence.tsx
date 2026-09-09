@@ -3,15 +3,11 @@
 import NextImage from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { ScrollTrigger, registerGsap } from "@/components/motion/gsap";
-import {
-  HERO_FRAME_COUNT,
-  HERO_FRAME_PIN_VH,
-  heroFramePath,
-} from "@/lib/hero-frames";
+import { HERO_FRAME_COUNT, heroFramePath } from "@/lib/hero-frames";
 
 /**
- * Canvas frame-by-frame scrub of the hero. Pins the hero section for
- * HERO_FRAME_PIN_VH viewport-heights and advances the frame with scroll.
+ * Canvas frame-by-frame scrub of the hero. No pin — the frames advance across
+ * the hero's natural scroll-out, so it never fights the pinned sections below.
  * Shows the static poster until every frame has decoded. Only mounted on
  * desktop with motion allowed — see HeroMedia.
  */
@@ -79,11 +75,13 @@ export function HeroFrameSequence() {
       images[i] = img;
     }
 
+    // Scrub the frames across the hero's natural exit — no pin, so it never
+    // fights the pinned sections that follow. Frame 0 when the hero fills the
+    // viewport, last frame when it has scrolled fully past.
     const st = ScrollTrigger.create({
       trigger: section,
       start: "top top",
-      end: `+=${window.innerHeight * HERO_FRAME_PIN_VH}`,
-      pin: true,
+      end: "bottom top",
       scrub: 0.5,
       invalidateOnRefresh: true,
       onUpdate: (self) => {

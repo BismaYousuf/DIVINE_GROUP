@@ -8,10 +8,7 @@
  *
  * See public/media/hero-frames/README.md for export guidance.
  */
-export const HERO_FRAME_COUNT = 0;
-
-/** How many viewport-heights of scroll the pinned sequence spans. */
-export const HERO_FRAME_PIN_VH = 1.8;
+export const HERO_FRAME_COUNT = 96;
 
 export function heroFramePath(index: number): string {
   return `/media/hero-frames/frame_${String(index + 1).padStart(4, "0")}.webp`;

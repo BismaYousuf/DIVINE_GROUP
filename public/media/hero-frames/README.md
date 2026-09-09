@@ -1,47 +1,39 @@
 # Hero scroll frame sequence
 
-Drop the exported frames in this folder, then flip the switch. Until you do, the
-hero uses the single static image (`../hero.jpg`) — nothing changes.
+**Currently active.** 96 WebP frames (`frame_0001.webp` … `frame_0096.webp`) extracted
+from `_source-media/Truck_driving_on_highway_1080p_*.mp4` — a 4s, 24fps, 1920×1080 clip —
+scaled to 1600px wide, ~25 KB/frame, ~2.4 MB total.
 
-## 1. Produce the frames
+## How it behaves
 
-- Export **90–130 frames** of the drive shot (a 3–4 s clip at 30 fps, or a 3D
-  render). More frames = smoother scrub, heavier download.
-- Resize to **≤ 1600 px wide** (the hero is a background; more resolution is
-  wasted bandwidth).
-- Encode as **WebP**, quality ~72, targeting **15–35 KB per frame**
-  (~2–4 MB for 120 frames total).
-- Name them zero-padded, 1-based: `frame_0001.webp`, `frame_0002.webp`, …
+On desktop with motion allowed, `HeroFrameSequence` draws the frames to a `<canvas>` and
+scrubs frame 0 → 95 as the hero scrolls from full-screen to fully past. **No pin** — it
+never fights the pinned sections below it. Mobile and `prefers-reduced-motion` keep the
+static poster (`../hero.jpg`); the sequence isn't even mounted.
 
-Example with `ffmpeg` + `cwebp`:
+## Regenerating from a new clip
 
 ```bash
-ffmpeg -i drive.mp4 -vf "fps=30,scale=1600:-2" frames_src/%04d.png
-for f in frames_src/*.png; do
-  cwebp -q 72 "$f" -o "public/media/hero-frames/frame_$(basename "${f%.png}").webp"
-done
+# 1. extract every frame, resized
+ffmpeg -v error -i _source-media/<clip>.mp4 -vf "scale=1600:-2" _frames_tmp/%04d.png
+
+# 2. PNG -> WebP, renamed frame_0001.webp …
+node -e "const s=require('sharp'),fs=require('fs');const f=fs.readdirSync('_frames_tmp').filter(x=>x.endsWith('.png')).sort();(async()=>{for(let i=0;i<f.length;i++)await s('_frames_tmp/'+f[i]).webp({quality:72,effort:4}).toFile('public/media/hero-frames/frame_'+String(i+1).padStart(4,'0')+'.webp');console.log(f.length+' frames')})()"
+
+rm -rf _frames_tmp
 ```
 
-## 2. Turn it on
+Then set `HERO_FRAME_COUNT` in `lib/hero-frames.ts` to the new count.
 
-In `lib/hero-frames.ts` set:
+## Guidelines for the source clip
 
-```ts
-export const HERO_FRAME_COUNT = 120; // <- your actual frame count
-```
+- 3–5 seconds, ≥ 24 fps → 70–150 frames. Fewer = choppier scrub, more = heavier download.
+- Locked or truck-tracking camera, steady exposure and colour across the whole clip
+  (frames are shown individually — an exposure jump reads as a flash).
+- Overcast / desaturated works best; the ink + ember wash is applied in
+  `components/home/hero-frame-sequence.tsx`.
+- Don't exceed ~1600px wide or ~3 MB total.
 
-That's it. On desktop with motion allowed, the hero now pins for
-`HERO_FRAME_PIN_VH` viewport-heights (default 1.8) and scrubs the frames with
-scroll. The static image shows as a poster with a "Loading %" readout until
-every frame decodes.
+## Turning it off
 
-## 3. Mobile & reduced motion
-
-`HeroMedia` only mounts the sequence when `desktop && !reduced`. Phones and
-anyone with "reduce motion" on keep the static poster — do **not** ship 120
-frames to mobile.
-
-## 4. Tuning
-
-- Scrub feel / pin length: `HERO_FRAME_PIN_VH` in `lib/hero-frames.ts`.
-- Cover-fit and the ink/ember wash: `components/home/hero-frame-sequence.tsx`.
+Set `HERO_FRAME_COUNT = 0` in `lib/hero-frames.ts` — the hero reverts to the static image.

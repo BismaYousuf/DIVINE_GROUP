@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { inlineQuoteSchema } from "./quote";
+import { inlineQuoteSchema, quoteSchema } from "./quote";
 
 const valid = {
   name: "Ada Byron",
@@ -43,5 +43,49 @@ describe("inlineQuoteSchema", () => {
       email: "  ADA@Example.COM ",
     });
     expect(parsed.email).toBe("ada@example.com");
+  });
+});
+
+const fullValid = {
+  dotNumber: "1234567",
+  companyName: "Byron Freight LLC",
+  garagingAddress: "100 Depot Rd, Springfield, IL 62701",
+  ownerName: "Ada Byron",
+  email: "ada@byronfreight.com",
+  phone: "555 123 4567",
+  coveragesNeeded: "Auto liability, cargo and physical damage for 8 power units",
+  vins: ["1FUJGLDR0CLBP8834", "3AKJHHDR7JSJX4321", "", "", ""],
+  consent: true,
+};
+
+describe("quoteSchema (full)", () => {
+  it("accepts a complete submission", () => {
+    expect(quoteSchema.safeParse(fullValid).success).toBe(true);
+  });
+
+  it("rejects a non-numeric DOT number", () => {
+    expect(
+      quoteSchema.safeParse({ ...fullValid, dotNumber: "12ab" }).success,
+    ).toBe(false);
+  });
+
+  it("rejects more than 60 VINs", () => {
+    const vins = Array.from({ length: 61 }, () => "1FUJGLDR0CLBP8834");
+    expect(quoteSchema.safeParse({ ...fullValid, vins }).success).toBe(false);
+  });
+
+  it("rejects a VIN containing I, O or Q", () => {
+    expect(
+      quoteSchema.safeParse({
+        ...fullValid,
+        vins: ["1IUJGLDR0CLBP8834"],
+      }).success,
+    ).toBe(false);
+  });
+
+  it("rejects consent = false", () => {
+    expect(
+      quoteSchema.safeParse({ ...fullValid, consent: false }).success,
+    ).toBe(false);
   });
 });

@@ -4,6 +4,8 @@ import { Capabilities } from "@/components/home/capabilities";
 import { CoverageBand } from "@/components/home/coverage-band";
 import { InlineQuote } from "@/components/home/inline-quote";
 import { DivineDifference } from "@/components/home/divine-difference";
+import { Numbers } from "@/components/home/numbers";
+import { CtaBand } from "@/components/home/cta-band";
 
 export default function Home() {
   return (
@@ -14,13 +16,8 @@ export default function Home() {
       <CoverageBand />
       <InlineQuote />
       <DivineDifference />
-
-      {/* Numbers + closing CTA land in the next task. */}
-      <section className="section-y gutter">
-        <p className="max-w-[62ch] text-body-l text-graphite">
-          Next: numbers, and the closing CTA.
-        </p>
-      </section>
+      <Numbers />
+      <CtaBand />
     </>
   );
 }

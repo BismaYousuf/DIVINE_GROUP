@@ -5,7 +5,7 @@ import { CoverageBand } from "@/components/home/coverage-band";
 import { InlineQuote } from "@/components/home/inline-quote";
 import { DivineDifference } from "@/components/home/divine-difference";
 import { Numbers } from "@/components/home/numbers";
-import { CtaBand } from "@/components/home/cta-band";
+import { CtaBand } from "@/components/page/cta-band";
 import { JsonLd } from "@/components/seo/json-ld";
 
 export default function Home() {

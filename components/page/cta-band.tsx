@@ -3,7 +3,11 @@ import { MagneticButton } from "@/components/motion/magnetic-button";
 import { Parallax } from "@/components/motion/parallax";
 import { siteConfig } from "@/lib/site-config";
 
-export function CtaBand() {
+export function CtaBand({
+  heading = "Let’s build your coverage.",
+}: {
+  heading?: string;
+}) {
   return (
     <section
       aria-labelledby="cta-heading"
@@ -15,7 +19,7 @@ export function CtaBand() {
           id="cta-heading"
           className="max-w-[16ch] font-display text-display-l font-medium leading-[0.98]"
         >
-          Let&rsquo;s build your coverage.
+          {heading}
         </SplitLines>
 
         <div className="mt-10 flex flex-wrap items-center gap-5">

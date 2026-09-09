@@ -82,3 +82,71 @@ cue is a small persistent affordance (hidden under reduced motion).
 
 `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run test` (18 tests) ✓ · `npm run build`
 (13 routes) ✓ · 0 browser console errors on the production build.
+
+---
+
+# Phase 2 + 3 audit — 2026-09-09
+
+## Reduced motion (all new pages, 1440×900, emulated)
+
+| Page | height | h-scroll | h1 | hidden text |
+|---|---|---|---|---|
+| /our-difference | 3661px | none | 1 | 0 |
+| /services | 3544px | none | 1 | 0 |
+| /services/trucking-insurance | 4093px | none | 1 | 0 |
+| /get-a-quote | 3362px | none | 1 | 0 |
+| /contact-us | 2651px | none | 1 | 0 |
+| /privacy-policy | 2204px | none | 1 | 0 |
+| /terms | 2149px | none | 1 | 0 |
+
+All pages render full, static, one `<h1>` each, nothing stuck invisible.
+
+**Note:** a `fullPage` screenshot with motion *on* shows below-fold `Reveal`/`SplitLines`
+content as blank — that is a screenshot artifact (Playwright doesn't fire scroll triggers for
+a full-page capture). Verified by wheel-scrolling: every section reveals correctly, and the
+reduced-motion `hiddenText=0` check proves nothing is genuinely hidden.
+
+## Forms not gated behind scroll animation
+
+Removed the `<Reveal>` wrapper from `QuoteForm`, `ContactForm` and the Home `InlineQuoteForm`
+so a form can never be left invisible if a ScrollTrigger fails to fire. Forms now render
+immediately; only decorative sections use `Reveal`.
+
+## Mobile (390 × 844, motion on)
+
+All five content pages: `scrollWidth` 375 ≤ viewport, zero elements breaking out of the
+viewport, forms single-column, no pins.
+
+## Full quote form (`/get-a-quote`)
+
+- DOT field blocks non-digits on type/paste/drop (`onBeforeInput`), backed by the Zod regex.
+- VIN repeater: 5 rows default, "Add another vehicle" / "Remove", `> 5` shows the Excel-list
+  callout. Fixed a stale-closure bug — increment/decrement now use the updater form.
+- 7 upload rows enforce 1.5 MB/file + type allowlist client-side; the route re-checks size,
+  MIME, and a ~4 MB combined guard, returning 400/413. Covered by 5 new route tests.
+- Verified: empty submit surfaces 8 inline errors; valid submit reaches `/api/quote?mode=full`
+  (500 on the dummy Resend key = wiring proven).
+
+## Links / SEO
+
+Every nav, footer and inter-page link resolves (200). `/sitemap.xml` lists all 8 real routes;
+`/robots.txt` serves. `not-found` still branded.
+
+## Phase 3 (hero frame sequence)
+
+`HERO_FRAME_COUNT = 0` → `heroFramesEnabled` false → `HeroMedia` renders the Phase 1 static
+image path unchanged (verified: hero screenshot identical, 0 console errors). Setting the
+count ≥ 2 mounts `HeroFrameSequence` on desktop-with-motion only. Frame export + switch
+instructions in `public/media/hero-frames/README.md`.
+
+## Gate status
+
+`npm run typecheck` ✓ · `npm run lint` ✓ · `npm run test` (28 tests) ✓ · `npm run build`
+(13 routes) ✓.
+
+## Known cosmetic follow-ups (carried forward)
+
+- Generous vertical whitespace on interior pages (SplitFeature gaps, section paddings) and
+  capabilities panels. Reads as editorial but could be denser — tighten in a polish pass.
+- Placeholder office address renders as `—` on /contact-us until real data is supplied.
+- OG image wordmark uses a Georgia stand-in for Clash Display.

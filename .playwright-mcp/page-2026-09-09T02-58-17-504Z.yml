@@ -1,0 +1,81 @@
+- generic [active] [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#content"
+  - banner [ref=e3]:
+    - generic [ref=e4]:
+      - link "Divine Group" [ref=e5] [cursor=pointer]:
+        - /url: /
+      - navigation "Primary" [ref=e6]:
+        - list [ref=e7]:
+          - listitem [ref=e8]:
+            - link "Our Difference" [ref=e9] [cursor=pointer]:
+              - /url: /our-difference
+          - listitem [ref=e10]:
+            - link "Services" [ref=e11] [cursor=pointer]:
+              - /url: /services
+          - listitem [ref=e12]:
+            - link "Contact" [ref=e13] [cursor=pointer]:
+              - /url: /contact-us
+        - link "Get a Quote" [ref=e14] [cursor=pointer]:
+          - /url: /get-a-quote
+  - main [ref=e15]:
+    - generic [ref=e16]:
+      - paragraph [ref=e17]: Freight & commercial insurance
+      - heading "Coverage engineered for the road ahead." [level=1] [ref=e18]
+    - paragraph [ref=e20]: "Foundation is up: tokens, fonts, motion primitives, header, footer. Sections land here next."
+    - heading "A darker band to test header inversion." [level=2] [ref=e22]
+    - paragraph [ref=e24]: Back to paper. Scroll up to confirm the header reappears.
+  - contentinfo [ref=e25]:
+    - generic [ref=e26]:
+      - generic [ref=e27]:
+        - generic [ref=e28]:
+          - paragraph [ref=e29]: Divine Group
+          - paragraph [ref=e30]: Freight & commercial insurance, engineered around your operation.
+        - navigation "Footer" [ref=e31]:
+          - paragraph [ref=e32]: Site
+          - list [ref=e33]:
+            - listitem [ref=e34]:
+              - link "Our Difference" [ref=e35] [cursor=pointer]:
+                - /url: /our-difference
+            - listitem [ref=e36]:
+              - link "Services" [ref=e37] [cursor=pointer]:
+                - /url: /services
+            - listitem [ref=e38]:
+              - link "Contact" [ref=e39] [cursor=pointer]:
+                - /url: /contact-us
+            - listitem [ref=e40]:
+              - link "Get a Quote" [ref=e41] [cursor=pointer]:
+                - /url: /get-a-quote
+        - generic [ref=e42]:
+          - paragraph [ref=e43]: Contact
+          - list [ref=e44]:
+            - listitem [ref=e45]:
+              - link "(000) 000-0000" [ref=e46] [cursor=pointer]:
+                - /url: tel:+10000000000
+            - listitem [ref=e47]:
+              - link "hello@divinegroup.example" [ref=e48] [cursor=pointer]:
+                - /url: mailto:hello@divinegroup.example
+          - list [ref=e49]:
+            - listitem [ref=e50]:
+              - link "LinkedIn" [ref=e51] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e52]:
+              - link "Instagram" [ref=e53] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e54]:
+              - link "Facebook" [ref=e55] [cursor=pointer]:
+                - /url: "#"
+            - listitem [ref=e56]:
+              - link "X" [ref=e57] [cursor=pointer]:
+                - /url: "#"
+      - generic [ref=e58]:
+        - paragraph [ref=e59]: © 2026 Divine Group Inc.
+        - generic [ref=e60]:
+          - link "Privacy Policy" [ref=e61] [cursor=pointer]:
+            - /url: /privacy-policy
+          - link "Terms of Use" [ref=e62] [cursor=pointer]:
+            - /url: /terms
+      - paragraph [ref=e63]: Insurance coverages vary by location, policy, and individual business. Talk to a licensed agent about coverages in your state. Material on this site is not a warranty of state or federal law.
+    - generic:
+      - generic [aria-hidden]: Divine Group
+  - region "Notifications alt+T"

@@ -148,3 +148,34 @@
 @utility section-y {
   padding-block: clamp(6rem, 14vh, 12.5rem);
 }
+
+/* ============================================================================
+   Keyframes (mobile nav sheet, misc)
+   ========================================================================== */
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes slide-in {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes slide-out {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-state] {
+    animation: none !important;
+  }
+}

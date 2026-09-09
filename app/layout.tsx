@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
 import { fontVariables } from "@/lib/fonts";
 import { SmoothScrollProvider } from "@/components/motion/smooth-scroll-provider";
+import { SiteHeader } from "@/components/layout/site-header";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { SkipLink } from "@/components/layout/skip-link";
+import { GridLines } from "@/components/layout/grid-lines";
+import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
 
@@ -24,8 +29,17 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${fontVariables} antialiased`}>
-      <body className="min-h-dvh">
-        <SmoothScrollProvider>{children}</SmoothScrollProvider>
+      <body className="relative min-h-dvh">
+        <SkipLink />
+        <GridLines />
+        <SmoothScrollProvider>
+          <SiteHeader />
+          <main id="content" className="relative z-10">
+            {children}
+          </main>
+          <SiteFooter />
+        </SmoothScrollProvider>
+        <Toaster />
       </body>
     </html>
   );

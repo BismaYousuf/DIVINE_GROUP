@@ -179,6 +179,45 @@ with motion allowed.
 - Next's image optimiser caches by URL — had to `rm -rf .next` once after replacing the
   jpgs in place, since the filenames were unchanged.
 
+## Capabilities — stacked-card rework (2026-09-10)
+
+The vertical-scrolling track was replaced with a **layered stacked-card scroll**.
+
+- **Desktop, motion allowed** (`min-width:1024px` + `no-preference`): all three `.cap-panel`s
+  are `position:absolute; inset:0` inside the pinned stage (panel 1 highest z-index → panel 3
+  lowest), transparent so `bg-paper` shows through. One scrubbed timeline (`scrub: 0.5`),
+  pinned for `innerHeight * (panels - 1)`. Each panel except the last: holds readable for the
+  first ~66% of its segment, then `yPercent 0→-100`, `autoAlpha 1→0`, `scale 1→0.96` (exit
+  starts at segment `+0.66`, 0.34 long). Incoming panel settles `scale 0.94→1` over
+  `[i-0.3, i]` so it lands exactly as the one above clears. Last panel stays; pin releases.
+  Counter-parallax on `.cap-image img` (`yPercent -6→6`, `scale 1.06→1`) kept, now a single
+  timeline tween across the whole pin. ProgressRail active = `Math.round(progress * steps)`.
+- **Positioning is all behind `motion-safe:lg:`** (`absolute inset-0 h-screen`) + the
+  `desktop` matchMedia branch — static layout (mobile, reduced-motion, no-JS) is untouched:
+  panels stay `position:static` in normal document flow, full-height, fully visible, DOM
+  order = reading/focus order.
+- **Mobile + motion**: unchanged per-panel enter reveal (`autoAlpha 0→1`, `y 28→0`, image
+  `clipPath` wipe). **Reduced-motion**: early return, everything static.
+- `capability-panel.tsx` untouched (its root was already transparent — no `bg-*`).
+- Cleanup: `tl.scrollTrigger?.kill(); tl.kill()` in the branch, `mm.revert()` outer.
+- **Show-through fix.** First cut left all three transparent panels at `autoAlpha: 1` per
+  the literal spec — Playwright screenshots showed the waiting panels' copy bleeding
+  through the active one ("01/02/03" → mush, three paragraphs superimposed). Waiting panels
+  now start `autoAlpha: 0` and the settle-in tween also runs `autoAlpha 0→1`, so the
+  handoff is a cross-dissolve timed to the outgoing panel clearing. `bg-paper` still shows
+  through (only one panel visible at a time). All other spec'd motion unchanged.
+- Verified: typecheck / lint / test (28) / build (13 routes) all green. Playwright
+  (`chromium-1217` via the cached `@playwright/mcp` install, driven by `window.__lenis`),
+  8-step scrub sweep of the pinned range at 1440×900:
+  - progress 0–0.33: panel 01 alone, crisp; 02/03 `opacity 0`, `scale 0.94`, `z` 2/1.
+  - progress ~0.375: 01 exiting (`opacity .29`, `ty -637`), 02 fading in (`opacity .51`).
+  - progress 0.5: 01 gone (`opacity 0`, `ty -900`), 02 settled (`scale 1`), 03 still hidden.
+  - progress 1: 03 alone, `scale 1`; pin releases. Rail index tracks `round(progress·2)`.
+  - `reducedMotion: reduce`: stage `position: relative`, `overflow: visible`, no pin; all
+    three panels `position: static`, `opacity 1`, full height, DOM order 01→02→03.
+  - mobile 390px: panels `position: static`; per-panel enter reveal path intact.
+  - 0 console / page errors in all three modes.
+
 ## Gate status
 
 `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run test` (28) ✓ · `npm run build` (13 routes) ✓.

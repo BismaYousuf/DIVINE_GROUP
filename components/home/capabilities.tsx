@@ -72,7 +72,7 @@ export function Capabilities() {
           const { desktop } = ctx.conditions as { desktop: boolean };
           const panels = gsap.utils.toArray<HTMLElement>(
             ".cap-panel",
-            track.current!,
+            stage.current!,
           );
           const images = panels.map((p) =>
             p.querySelector<HTMLElement>(".cap-image img"),
@@ -80,43 +80,81 @@ export function Capabilities() {
           const steps = panels.length - 1;
 
           if (desktop && steps > 0) {
-            const tween = gsap.to(track.current, {
-              yPercent: -100 * (steps / panels.length),
-              ease: "none",
+            // Stacked cards. Every panel is absolutely layered inside the pinned
+            // stage (see the `motion-safe:lg:` classes on `.cap-panel`), panel 1
+            // on top via z-index. One scrubbed timeline: each panel except the
+            // last holds readable for ~66% of its segment, then slides up and
+            // fades. The next panel is revealed with a cross-dissolve timed to
+            // the outgoing one clearing — it's held hidden until then so the
+            // transparent panels never let the waiting copy bleed through.
+            gsap.set(panels, {
+              yPercent: 0,
+              transformOrigin: "50% 50%",
+            });
+            panels.forEach((p, i) =>
+              gsap.set(p, {
+                autoAlpha: i === 0 ? 1 : 0,
+                scale: i === 0 ? 1 : 0.94,
+              }),
+            );
+
+            const tl = gsap.timeline({
+              defaults: { ease: EASE.out },
               scrollTrigger: {
                 trigger: stage.current,
                 start: "top top",
                 end: () => `+=${window.innerHeight * steps}`,
                 pin: true,
                 scrub: 0.5,
+                invalidateOnRefresh: true,
                 onUpdate: (self) =>
                   setActive(Math.round(self.progress * steps)),
               },
             });
 
-            // gentle counter-parallax on each panel image
-            images.forEach((img) => {
-              if (!img) return;
-              gsap.fromTo(
-                img,
-                { yPercent: -6, scale: 1.06 },
-                {
-                  yPercent: 6,
-                  scale: 1,
-                  ease: "none",
-                  scrollTrigger: {
-                    trigger: stage.current,
-                    start: "top top",
-                    end: () => `+=${window.innerHeight * steps}`,
-                    scrub: true,
+            panels.forEach((p, i) => {
+              const img = images[i];
+              if (img) {
+                // counter-parallax across the whole pinned range
+                tl.fromTo(
+                  img,
+                  { yPercent: -6, scale: 1.06 },
+                  { yPercent: 6, scale: 1, ease: "none", duration: steps },
+                  0,
+                );
+              }
+              if (i > 0) {
+                // fade + settle in — lands exactly as the panel above clears
+                tl.to(
+                  p,
+                  {
+                    autoAlpha: 1,
+                    scale: 1,
+                    duration: 0.3,
+                    immediateRender: false,
                   },
-                },
-              );
+                  i - 0.3,
+                );
+              }
+              if (i < steps) {
+                // travel up and off, fading, near the end of this segment
+                tl.to(
+                  p,
+                  {
+                    yPercent: -100,
+                    autoAlpha: 0,
+                    scale: 0.96,
+                    duration: 0.34,
+                    immediateRender: false,
+                  },
+                  i + 0.66,
+                );
+              }
             });
 
             return () => {
-              tween.scrollTrigger?.kill();
-              tween.kill();
+              tl.scrollTrigger?.kill();
+              tl.kill();
             };
           }
 
@@ -125,7 +163,7 @@ export function Capabilities() {
             return;
           }
 
-          // mobile (motion ok): reveal each panel as it enters
+          // mobile (motion ok): reveal each panel as it enters normal flow
           panels.forEach((p, i) => {
             gsap.from(p, {
               autoAlpha: 0,
@@ -171,11 +209,12 @@ export function Capabilities() {
         className="relative motion-safe:overflow-hidden motion-safe:lg:h-screen"
       >
         <ProgressRail active={active} />
-        <div ref={track} className="motion-safe:lg:will-change-transform">
-          {CAPS.map((c) => (
+        <div ref={track}>
+          {CAPS.map((c, i) => (
             <div
               key={c.n}
-              className="cap-panel mx-auto flex w-full max-w-content items-center gutter py-10 md:py-14 motion-safe:lg:h-screen motion-safe:lg:py-0"
+              style={{ zIndex: CAPS.length - i }}
+              className="cap-panel mx-auto flex w-full max-w-content items-center gutter py-10 md:py-14 motion-safe:lg:absolute motion-safe:lg:inset-0 motion-safe:lg:h-screen motion-safe:lg:py-0 motion-safe:lg:will-change-[transform,opacity]"
             >
               <CapabilityPanel {...c} className="w-full" />
             </div>

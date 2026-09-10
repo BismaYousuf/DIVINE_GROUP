@@ -5,7 +5,10 @@ import { HeroMedia } from "./hero-media";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden bg-ink text-paper-hi">
+    <section
+      data-hero-dark
+      className="relative flex min-h-[100svh] flex-col justify-end overflow-hidden bg-ink text-paper-hi"
+    >
       <HeroMedia />
 
       <div className="relative z-10 mx-auto w-full max-w-content gutter pt-32 pb-[clamp(3.5rem,10vh,7rem)]">

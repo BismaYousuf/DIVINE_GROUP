@@ -15,6 +15,7 @@ export function PageHero({
   const night = tone === "night";
   return (
     <section
+      data-hero-dark={night || undefined}
       className={cn(
         "relative overflow-hidden pb-14 pt-32 md:pb-20 md:pt-44",
         night ? "bg-night text-night-fg" : "bg-paper text-ink",

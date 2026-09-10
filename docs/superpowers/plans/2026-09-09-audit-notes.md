@@ -218,6 +218,26 @@ The vertical-scrolling track was replaced with a **layered stacked-card scroll**
   - mobile 390px: panels `position: static`; per-panel enter reveal path intact.
   - 0 console / page errors in all three modes.
 
+## Header contrast on light inner-page heroes (2026-09-10)
+
+`SiteHeader` computed `onDark = !scrolled || invert` — the `!scrolled` term assumed the
+top of every route sits over a dark hero. Only the home page does; every inner page's
+`PageHero` is `bg-paper`, so the white logo / nav / hamburger were invisible until you
+scrolled.
+
+- Home `Hero` `<section>` now carries `data-hero-dark`; `PageHero` emits it too when
+  `tone="night"`.
+- `SiteHeader` tracks `overHeroDark` in its scroll rAF — `true` while any
+  `[data-hero-dark]` element's `getBoundingClientRect().bottom > 64` (header height).
+  `onDark = invert || overHeroDark`. The `invert` store flag (driven by
+  `DivineDifference`) is unchanged.
+- The scrolled-glass background now keys off `onDark` too (`bg-night/80` vs `bg-paper/80`),
+  so a scrolled header still inside the home hero gets the dark panel, not a light one.
+- Verified in Chromium: inner pages (`/our-difference`, `/services`, `/get-a-quote`,
+  `/contact-us`) render ink logo/nav at the top (lum 0.04) over the light hero; home stays
+  white over the hero — including scrolled part-way down it and back up — and flips to ink
+  once the hero clears the header. 0 page errors.
+
 ## Gate status
 
 `npm run typecheck` ✓ · `npm run lint` ✓ · `npm run test` (28) ✓ · `npm run build` (13 routes) ✓.

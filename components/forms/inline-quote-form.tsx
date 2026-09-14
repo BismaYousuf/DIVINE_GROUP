@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
@@ -17,6 +17,7 @@ export function InlineQuoteForm() {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<InlineQuoteInput>({
@@ -127,14 +128,22 @@ export function InlineQuoteForm() {
         />
       </div>
 
-      <Select label="State" error={errors.state?.message} {...register("state")}>
-        <option value="">Select a state</option>
-        {US_STATES.map((s) => (
-          <option key={s} value={s}>
-            {s}
-          </option>
-        ))}
-      </Select>
+      <Controller
+        control={control}
+        name="state"
+        render={({ field }) => (
+          <Select
+            label="State"
+            placeholder="Select a state"
+            options={US_STATES.map((s) => ({ value: s, label: s }))}
+            error={errors.state?.message}
+            value={field.value}
+            onValueChange={field.onChange}
+            onBlur={field.onBlur}
+            name={field.name}
+          />
+        )}
+      />
 
       <Textarea
         label="What coverage are you looking for?"

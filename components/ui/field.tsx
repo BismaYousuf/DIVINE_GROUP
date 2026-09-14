@@ -5,10 +5,10 @@ import {
   useId,
   type InputHTMLAttributes,
   type TextareaHTMLAttributes,
-  type SelectHTMLAttributes,
   type ReactNode,
 } from "react";
-import { ChevronDown } from "lucide-react";
+import * as SelectPrimitive from "@radix-ui/react-select";
+import { Check, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /* ---------- shared bits ---------------------------------------------------- */
@@ -113,17 +113,42 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
 /* ---------- Select --------------------------------------------------- */
 
-type SelectProps = SelectHTMLAttributes<HTMLSelectElement> & {
+type SelectOption = { value: string; label: ReactNode };
+
+type SelectProps = {
   label: ReactNode;
   error?: ReactNode;
   required?: boolean;
-  children: ReactNode;
+  className?: string;
+  id?: string;
+  name?: string;
+  options: SelectOption[];
+  placeholder?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
+  onBlur?: () => void;
+  disabled?: boolean;
 };
 
-export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select(
-  { label, error, required, className, id, children, ...props },
-  ref,
-) {
+/**
+ * A native <select>'s popup (the <option> list) is rendered by the OS/browser
+ * and can't be styled — it always breaks from the rest of the form's look.
+ * Built on Radix Select instead so the open panel matches the site.
+ */
+export function Select({
+  label,
+  error,
+  required,
+  className,
+  id,
+  name,
+  options,
+  placeholder = "Select…",
+  value,
+  onValueChange,
+  onBlur,
+  disabled,
+}: SelectProps) {
   const auto = useId();
   const fieldId = id ?? auto;
   const errId = `${fieldId}-error`;
@@ -132,27 +157,60 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(function Select
       <Label htmlFor={fieldId} required={required}>
         {label}
       </Label>
-      <div className="relative">
-        <select
-          ref={ref}
+      <SelectPrimitive.Root
+        value={value || undefined}
+        onValueChange={onValueChange}
+        name={name}
+        disabled={disabled}
+      >
+        <SelectPrimitive.Trigger
           id={fieldId}
+          onBlur={onBlur}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errId : undefined}
-          className={cn(controlBase, "mt-2 appearance-none pr-7", className)}
-          {...props}
+          className={cn(
+            controlBase,
+            "mt-2 flex items-center justify-between gap-2 text-left",
+            !value && "text-graphite/60",
+            className,
+          )}
         >
-          {children}
-        </select>
-        <ChevronDown
-          aria-hidden
-          strokeWidth={1.5}
-          className="pointer-events-none absolute right-0 top-1/2 size-4 -translate-y-1/2 text-graphite"
-        />
-      </div>
+          <SelectPrimitive.Value placeholder={placeholder} />
+          <SelectPrimitive.Icon>
+            <ChevronDown
+              aria-hidden
+              strokeWidth={1.5}
+              className="size-4 shrink-0 text-graphite"
+            />
+          </SelectPrimitive.Icon>
+        </SelectPrimitive.Trigger>
+        <SelectPrimitive.Portal>
+          <SelectPrimitive.Content
+            position="popper"
+            sideOffset={8}
+            className="z-50 max-h-72 w-[var(--radix-select-trigger-width)] overflow-hidden border border-hairline bg-paper shadow-[0_12px_32px_rgba(11,11,12,0.12)]"
+          >
+            <SelectPrimitive.Viewport className="p-1">
+              {options.map((opt) => (
+                <SelectPrimitive.Item
+                  key={opt.value}
+                  value={opt.value}
+                  className="relative flex cursor-pointer select-none items-center justify-between gap-2 px-3 py-2.5 font-sans text-body text-ink outline-none data-[highlighted]:bg-ink/[0.04] data-[highlighted]:outline-none data-[state=checked]:text-accent"
+                >
+                  <SelectPrimitive.ItemText>{opt.label}</SelectPrimitive.ItemText>
+                  <SelectPrimitive.ItemIndicator>
+                    <Check aria-hidden strokeWidth={1.5} className="size-4" />
+                  </SelectPrimitive.ItemIndicator>
+                </SelectPrimitive.Item>
+              ))}
+            </SelectPrimitive.Viewport>
+          </SelectPrimitive.Content>
+        </SelectPrimitive.Portal>
+      </SelectPrimitive.Root>
       <Error id={errId}>{error}</Error>
     </div>
   );
-});
+}
 
 /* ---------- Checkbox ------------------------------------------------- */
 

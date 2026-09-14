@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { contactSchema, type ContactInput } from "@/lib/validations/contact";
@@ -15,6 +15,7 @@ export function ContactForm() {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<ContactInput>({
@@ -115,17 +116,22 @@ export function ContactForm() {
           error={errors.phone?.message}
           {...register("phone")}
         />
-        <Select
-          label="Reason"
-          error={errors.subject?.message}
-          {...register("subject")}
-        >
-          {SUBJECTS.map((s) => (
-            <option key={s} value={s}>
-              {s}
-            </option>
-          ))}
-        </Select>
+        <Controller
+          control={control}
+          name="subject"
+          render={({ field }) => (
+            <Select
+              label="Reason"
+              placeholder="Select a reason"
+              options={SUBJECTS.map((s) => ({ value: s, label: s }))}
+              error={errors.subject?.message}
+              value={field.value}
+              onValueChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+            />
+          )}
+        />
       </div>
 
       <Textarea

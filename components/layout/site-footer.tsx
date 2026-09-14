@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Parallax } from "@/components/motion/parallax";
 import { siteConfig } from "@/lib/site-config";
@@ -10,9 +11,18 @@ export function SiteFooter() {
       <div className="mx-auto max-w-content gutter pt-24 pb-14">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr] lg:gap-16">
           <div>
-            <p className="font-mono text-[0.8125rem] font-medium uppercase tracking-[0.2em]">
-              {siteConfig.name}
-            </p>
+            <div className="flex items-center gap-2.5">
+              <Image
+                src="/media/logo-icon.png"
+                alt=""
+                width={195}
+                height={169}
+                className="h-8 w-auto object-contain"
+              />
+              <span className="font-mono text-[0.8125rem] font-medium uppercase tracking-[0.2em]">
+                {siteConfig.name}
+              </span>
+            </div>
             <p className="mt-5 max-w-[32ch] text-caption text-paper-hi/60">
               {siteConfig.descriptor}
             </p>

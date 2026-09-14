@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { NavLink } from "./nav-link";
 import { MobileNav } from "./mobile-nav";
@@ -54,14 +55,23 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-content items-center justify-between gutter">
-        <Link
-          href="/"
-          className={cn(
-            "font-mono text-[0.8125rem] font-medium uppercase tracking-[0.2em] transition-colors",
-            onDark ? "text-paper-hi" : "text-ink",
-          )}
-        >
-          {siteConfig.name}
+        <Link href="/" className="flex items-center gap-2.5">
+          <Image
+            src="/media/logo-icon.png"
+            alt=""
+            width={195}
+            height={169}
+            className="h-7 w-auto object-contain"
+            priority
+          />
+          <span
+            className={cn(
+              "font-mono text-[0.8125rem] font-medium uppercase tracking-[0.2em] transition-colors",
+              onDark ? "text-paper-hi" : "text-ink",
+            )}
+          >
+            {siteConfig.name}
+          </span>
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-10 lg:flex">

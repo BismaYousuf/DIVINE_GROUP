@@ -23,7 +23,7 @@ function Label({
   required?: boolean;
 }) {
   return (
-    <label htmlFor={htmlFor} className="mono-label text-graphite">
+    <label htmlFor={htmlFor} className="mono-label font-semibold text-graphite">
       {children}
       {required ? <span className="text-accent"> *</span> : null}
     </label>

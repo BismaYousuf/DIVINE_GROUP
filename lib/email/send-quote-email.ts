@@ -17,19 +17,77 @@ export function escapeHtml(input: string): string {
 
 export type UploadFile = { field: string; file: File };
 
-function renderTable(rows: Array<[string, string]>): string {
-  const body = rows
+const BRAND = {
+  ink: "#0b0b0c",
+  paper: "#f4f2ed",
+  paperHi: "#fbfaf7",
+  accent: "#d64222",
+  graphite: "#6b6b66",
+  hairline: "#e3e0d8",
+};
+
+const FONT_STACK =
+  "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif";
+
+/**
+ * Shared branded shell for every notification email — a dark "Divine Group
+ * Website Team" header over a flat card with the submitted fields, styled to
+ * match the site instead of a bare unstyled table.
+ */
+export function renderEmailShell(opts: {
+  eyebrow: string;
+  heading: string;
+  rows: Array<[string, string]>;
+  footerNote: string;
+}): string {
+  const { eyebrow, heading, rows, footerNote } = opts;
+
+  const rowsHtml = rows
     .map(
-      ([k, v]) =>
-        `<tr><td style="padding:6px 14px;font-weight:600;white-space:nowrap;vertical-align:top">${escapeHtml(
-          k,
-        )}</td><td style="padding:6px 14px">${escapeHtml(v).replace(
-          /\n/g,
-          "<br>",
-        )}</td></tr>`,
+      ([k, v], i) => `
+      <tr>
+        <td style="padding:14px 0;border-top:${i === 0 ? "none" : `1px solid ${BRAND.hairline}`};font-family:${FONT_STACK};font-size:12px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:${BRAND.graphite};vertical-align:top;white-space:nowrap;width:1%;padding-right:24px">
+          ${escapeHtml(k)}
+        </td>
+        <td style="padding:14px 0;border-top:${i === 0 ? "none" : `1px solid ${BRAND.hairline}`};font-family:${FONT_STACK};font-size:15px;line-height:1.55;color:${BRAND.ink}">
+          ${escapeHtml(v).replace(/\n/g, "<br>")}
+        </td>
+      </tr>`,
     )
     .join("");
-  return `<table style="border-collapse:collapse;font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5">${body}</table>`;
+
+  return `
+<div style="background:${BRAND.paper};padding:32px 16px;font-family:${FONT_STACK}">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;margin:0 auto">
+    <tr>
+      <td style="background:${BRAND.ink};padding:24px 28px;border-radius:4px 4px 0 0">
+        <p style="margin:0;font-family:${FONT_STACK};font-size:13px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:${BRAND.paperHi}">
+          Divine Group <span style="color:${BRAND.accent}">— Website Team</span>
+        </p>
+      </td>
+    </tr>
+    <tr>
+      <td style="background:${BRAND.paperHi};padding:28px;border-radius:0 0 4px 4px;border:1px solid ${BRAND.hairline};border-top:none">
+        <p style="margin:0 0 6px;font-family:${FONT_STACK};font-size:11px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:${BRAND.accent}">
+          ${escapeHtml(eyebrow)}
+        </p>
+        <h1 style="margin:0 0 20px;font-family:${FONT_STACK};font-size:20px;font-weight:700;color:${BRAND.ink}">
+          ${escapeHtml(heading)}
+        </h1>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+          ${rowsHtml}
+        </table>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding:18px 4px 0">
+        <p style="margin:0;font-family:${FONT_STACK};font-size:12px;line-height:1.6;color:${BRAND.graphite}">
+          ${escapeHtml(footerNote)}
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>`;
 }
 
 async function buildAttachments(files: UploadFile[]) {
@@ -77,9 +135,12 @@ export async function sendQuoteEmail(
       data.company ? ` (${data.company})` : ""
     }`,
     replyTo: data.email,
-    html: `<h2 style="font-family:system-ui,-apple-system,sans-serif;font-size:18px">New quote request (short form)</h2>${renderTable(
+    html: renderEmailShell({
+      eyebrow: "New submission",
+      heading: "Quote request",
       rows,
-    )}`,
+      footerNote: `Sent from the Divine Group website's quick quote form. Reply-to is set to ${data.email}.`,
+    }),
     files,
   });
 }
@@ -105,9 +166,12 @@ export async function sendFullQuoteEmail(
   await send({
     subject: `New quote request — ${data.companyName} (DOT ${data.dotNumber})`,
     replyTo: data.email,
-    html: `<h2 style="font-family:system-ui,-apple-system,sans-serif;font-size:18px">New quote request</h2>${renderTable(
+    html: renderEmailShell({
+      eyebrow: "New submission",
+      heading: "Quote request",
       rows,
-    )}`,
+      footerNote: `Sent from the Divine Group website's full quote form. Reply-to is set to ${data.email}.`,
+    }),
     files,
   });
 }

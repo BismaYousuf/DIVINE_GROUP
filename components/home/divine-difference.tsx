@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -16,6 +16,44 @@ import { useUIStore } from "@/stores/ui-store";
 
 const GRAIN =
   "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")";
+
+const REEL_CLIPS = [
+  "/media/difference-01-highway.mp4",
+  "/media/difference-02-dispatch.mp4",
+  "/media/difference-03-yard.mp4",
+];
+
+function DifferenceReel({ reduced }: { reduced: boolean }) {
+  const [index, setIndex] = useState(0);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  if (reduced) {
+    return (
+      <Image
+        src="/media/night.jpg"
+        alt=""
+        fill
+        sizes="100vw"
+        className="pointer-events-none -z-20 object-cover opacity-40 filter-[grayscale(1)_contrast(1.1)_brightness(0.7)]"
+      />
+    );
+  }
+
+  return (
+    <video
+      ref={videoRef}
+      key={REEL_CLIPS[index]}
+      autoPlay
+      muted
+      playsInline
+      preload="auto"
+      onEnded={() => setIndex((i) => (i + 1) % REEL_CLIPS.length)}
+      className="pointer-events-none absolute inset-0 -z-20 size-full object-cover opacity-40 filter-[grayscale(1)_contrast(1.1)_brightness(0.7)]"
+    >
+      <source src={REEL_CLIPS[index]} type="video/mp4" />
+    </video>
+  );
+}
 
 export function DivineDifference() {
   const root = useRef<HTMLElement>(null);
@@ -81,14 +119,8 @@ export function DivineDifference() {
       aria-labelledby="difference-heading"
       className="relative isolate overflow-hidden bg-night text-night-fg section-y"
     >
-      {/* atmospheric base — headlights at night */}
-      <Image
-        src="/media/night.jpg"
-        alt=""
-        fill
-        sizes="100vw"
-        className="pointer-events-none -z-20 object-cover opacity-40 [filter:grayscale(1)_contrast(1.1)_brightness(0.7)]"
-      />
+      {/* atmospheric base — night reel: highway, dispatch, yard, looping */}
+      <DifferenceReel reduced={reduced} />
       <div className="pointer-events-none absolute inset-0 -z-20 bg-night/50" />
 
       <div

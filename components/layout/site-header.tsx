@@ -12,26 +12,24 @@ import { cn } from "@/lib/utils";
 export function SiteHeader() {
   const ref = useRef<HTMLElement>(null);
   const [scrolled, setScrolled] = useState(false);
-  const [hidden, setHidden] = useState(false);
   // True while a dark hero (home Hero, or a night-tone PageHero) still sits
   // behind the fixed header. Replaces the old "top of page === dark" guess,
   // which was only ever right on the home page.
   const [overHeroDark, setOverHeroDark] = useState(false);
   const invert = useUIStore((s) => s.headerInverted);
 
-  // Scroll position + direction (works with Lenis, which updates native scroll).
+  // Scroll position only (works with Lenis, which updates native scroll).
+  // The header always stays fixed/visible — it never hides on scroll down.
   useEffect(() => {
-    let last = window.scrollY;
     let raf = 0;
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
         const y = window.scrollY;
         setScrolled(y > 24);
-        setHidden(y > 160 && y > last + 4);
+
         const hero = document.querySelector<HTMLElement>("[data-hero-dark]");
         setOverHeroDark(!!hero && hero.getBoundingClientRect().bottom > 64);
-        if (Math.abs(y - last) > 4) last = y;
         raf = 0;
       });
     };
@@ -50,8 +48,7 @@ export function SiteHeader() {
     <header
       ref={ref}
       className={cn(
-        "fixed inset-x-0 top-0 z-40 transition-[transform,background-color,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-        hidden ? "-translate-y-full" : "translate-y-0",
+        "fixed inset-x-0 top-0 z-40 transition-[background-color,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
         scrolled && !onDark && "border-b border-hairline bg-paper/80 backdrop-blur-md",
         scrolled && onDark && "border-b border-white/10 bg-night/80 backdrop-blur-md",
       )}

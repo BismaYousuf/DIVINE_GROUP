@@ -39,7 +39,11 @@ export function DivineDifference() {
         onRefresh: (self) => setHeaderInverted(self.isActive),
       });
 
-      if (reduced) return () => invertTrigger.kill();
+      if (reduced)
+        return () => {
+          invertTrigger.kill();
+          setHeaderInverted(false);
+        };
 
       const amt = desktop ? 80 : 8;
       [bloomA.current, bloomB.current].forEach((el, i) => {
@@ -61,7 +65,10 @@ export function DivineDifference() {
         );
       });
 
-      return () => invertTrigger.kill();
+      return () => {
+        invertTrigger.kill();
+        setHeaderInverted(false);
+      };
     },
     { scope: root, dependencies: [ready, reduced, desktop] },
   );
@@ -107,11 +114,14 @@ export function DivineDifference() {
           <SplitLines
             as="h2"
             id="difference-heading"
-            className="mt-6 max-w-[18ch] font-display text-display-l font-medium leading-[1.03]"
+            className="mt-6 max-w-[20ch] font-display text-display-l font-medium leading-[1.03]"
           >
-            Anyone can bind a policy. We&rsquo;re the number you call when a load
-            is on its side at 2 a.m.
+            Get a Free Commercial Truck Insurance Quote Today.
           </SplitLines>
+          <p className="mt-6 max-w-[46ch] text-body-l text-night-fg/70">
+            Competitive coverage options for owner-operators, trucking
+            companies, fleets, non-fleets and new authorities.
+          </p>
         </div>
 
         <Link

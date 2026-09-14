@@ -8,7 +8,7 @@ const STATS: { value: number; suffix?: string; label: string }[] = [
     label: "Lines of coverage we place for freight and commercial fleets",
   },
   { value: 24, suffix: "h", label: "Typical turnaround on a reviewed quote" },
-  { value: 98, suffix: "%", label: "Certificate requests handled the same day" },
+  { value: 98, suffix: "%", label: "Certificate requests handled immediately" },
   {
     value: 3,
     label: "Countries covered — United States, Mexico and Canada",

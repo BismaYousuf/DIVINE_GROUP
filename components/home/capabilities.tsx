@@ -12,7 +12,7 @@ const CAPS: Capability[] = [
   {
     n: "01",
     label: "Fluency",
-    body: "We come from freight. Operating ratios, CSA scores, radius filings, reefer breakdowns — we speak the language your business runs on, so nothing gets lost in translation.",
+    body: "We come from freight. Operating ratios, CSA scores, radius, filings, reefer breakdowns — we speak the language your business runs on, so nothing gets lost in translation.",
     img: "/media/cap-01.jpg",
   },
   {

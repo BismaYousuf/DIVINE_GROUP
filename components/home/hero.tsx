@@ -20,18 +20,27 @@ export function Hero() {
         <SplitLines
           as="h1"
           immediate
-          className="mt-6 max-w-[16ch] font-semibold text-[clamp(2.75rem,7.6vw,6.75rem)] leading-[0.95] tracking-[-0.03em]"
+          className="mt-6 max-w-[18ch] font-semibold text-[clamp(2.75rem,7.6vw,6.75rem)] leading-[0.95] tracking-[-0.03em]"
         >
-          Freight coverage,
+          Commercial Truck
           <br />
-          engineered for
-          <br />
-          the long haul.
+          Insurance Quotes
         </SplitLines>
 
-        <p className="mt-8 max-w-[44ch] text-body-l text-accent">
-          We build the policy around how your fleet actually runs — not the other
-          way around.
+        <p className="mt-8 max-w-[48ch] text-body-l text-accent">
+          Get policy with us for your{" "}
+          <a href={siteConfig.cta.href} className="underline underline-offset-4 hover:text-paper-hi">
+            New MC
+          </a>
+          ,{" "}
+          <a href={siteConfig.cta.href} className="underline underline-offset-4 hover:text-paper-hi">
+            Renewal quote
+          </a>{" "}
+          or if you are facing{" "}
+          <a href={siteConfig.cta.href} className="underline underline-offset-4 hover:text-paper-hi">
+            Cancellation
+          </a>
+          .
         </p>
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
@@ -44,6 +53,10 @@ export function Hero() {
             See how we work
           </MagneticButton>
         </div>
+
+        <p className="mt-3 text-xs text-paper-hi/50">
+          (click on Get a Quote button to get quotes for you)
+        </p>
       </div>
 
       {/* instrument readout — textural only */}

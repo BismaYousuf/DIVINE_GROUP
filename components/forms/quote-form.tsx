@@ -39,6 +39,13 @@ const DOC_ROWS = [
     multiple: false,
     note: "only if more than 5 vehicles",
   },
+  {
+    key: "otherDocs",
+    label: "Any other documents",
+    accept: ACCEPT_DOCS,
+    multiple: true,
+    note: "anything else you'd like to include",
+  },
 ] as const;
 
 export function QuoteForm() {

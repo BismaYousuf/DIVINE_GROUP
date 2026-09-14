@@ -62,11 +62,11 @@ export function HeroMedia() {
           fill
           priority
           sizes="100vw"
-          className="object-cover filter-[grayscale(1)_contrast(1.08)_brightness(0.82)]"
+          className="object-cover filter-[grayscale(1)_contrast(1.05)_brightness(1.05)]"
         />
       </div>
       {/* duotone + legibility wash */}
-      <div className="absolute inset-0 bg-ink/55" />
+      <div className="absolute inset-0 bg-ink/30" />
       <div className="absolute inset-0 bg-accent/10 mix-blend-overlay" />
       <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/25 to-ink/45" />
     </div>

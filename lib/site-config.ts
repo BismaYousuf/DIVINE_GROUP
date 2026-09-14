@@ -6,14 +6,14 @@
 
 export const siteConfig = {
   name: "Divine Group",
-  legalName: "Divine Group Inc.", // CLIENT TO CONFIRM (spelling: Divine vs Devine)
+  legalName: "Divine Group",
   descriptor: "Freight & commercial insurance, engineered around your operation.",
   url: "https://divinegroup.example", // CLIENT TO CONFIRM
   ogImage: "/media/og.jpg",
 
-  phone: "(000) 000-0000", // CLIENT TO CONFIRM
-  phoneHref: "tel:+10000000000", // CLIENT TO CONFIRM
-  email: "hello@divinegroup.example", // CLIENT TO CONFIRM
+  phone: "(610) 646-5037",
+  phoneHref: "tel:+16106465037",
+  email: "submissions@divinegroupllc.com",
 
   address: {
     // CLIENT TO CONFIRM — real office address
@@ -33,10 +33,10 @@ export const siteConfig = {
   cta: { label: "Get a Quote", href: "/get-a-quote" },
 
   socials: [
+    { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61593982666177" },
+    { label: "Instagram", href: "https://www.instagram.com/thedivinegroup1/" },
     // CLIENT TO CONFIRM — real profile URLs
     { label: "LinkedIn", href: "#" },
-    { label: "Instagram", href: "#" },
-    { label: "Facebook", href: "#" },
     { label: "X", href: "#" },
   ],
 

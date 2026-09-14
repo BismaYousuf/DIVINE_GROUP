@@ -113,14 +113,14 @@ export function HeroFrameSequence() {
         fill
         priority
         sizes="100vw"
-        className="object-cover filter-[grayscale(1)_contrast(1.08)_brightness(0.82)]"
+        className="object-cover filter-[grayscale(1)_contrast(1.05)_brightness(1.05)]"
       />
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 h-full w-full filter-[grayscale(1)_contrast(1.05)_brightness(1.05)]"
         style={{ opacity: progress >= 1 ? 1 : 0, transition: "opacity .4s" }}
       />
-      <div className="absolute inset-0 bg-ink/55" />
+      <div className="absolute inset-0 bg-ink/30" />
       <div className="absolute inset-0 bg-accent/10 mix-blend-overlay" />
       <div className="absolute inset-0 bg-linear-to-t from-ink via-ink/25 to-ink/45" />
       {progress > 0 && progress < 1 ? (

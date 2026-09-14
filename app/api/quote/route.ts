@@ -9,8 +9,10 @@ import { verifyTurnstile } from "@/lib/turnstile";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const MAX_FILE_BYTES = Math.round(1.5 * 1024 * 1024);
-const MAX_TOTAL_BYTES = 4 * 1024 * 1024;
+const MAX_FILE_BYTES = 8 * 1024 * 1024;
+// Attachments are base64-encoded for the email provider (~37% size overhead),
+// which caps around 40 MB per email — keep raw total well under that.
+const MAX_TOTAL_BYTES = 25 * 1024 * 1024;
 const ALLOWED_TYPES = new Set([
   "application/pdf",
   "image/png",
@@ -90,7 +92,9 @@ export async function POST(req: Request): Promise<Response> {
         if (value.size === 0) continue;
         if (value.size > MAX_FILE_BYTES) {
           return Response.json(
-            { error: `${value.name} is over 1.5 MB. Please attach a smaller file.` },
+            {
+              error: `${value.name} is over ${MAX_FILE_BYTES / 1024 / 1024} MB. Please attach a smaller file.`,
+            },
             { status: 400 },
           );
         }

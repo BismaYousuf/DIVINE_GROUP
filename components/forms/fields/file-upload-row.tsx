@@ -9,14 +9,12 @@ export function FileUploadRow({
   label,
   accept,
   multiple = true,
-  maxMB = 1.5,
   note,
   onChange,
 }: {
   label: string;
   accept: string[];
   multiple?: boolean;
-  maxMB?: number;
   note?: string;
   onChange: (files: File[]) => void;
 }) {
@@ -32,11 +30,7 @@ export function FileUploadRow({
 
   function ingest(list: FileList | null) {
     if (!list || list.length === 0) return;
-    const { accepted, rejected } = partitionFiles(
-      list,
-      maxMB * 1024 * 1024,
-      accept,
-    );
+    const { accepted, rejected } = partitionFiles(list, Infinity, accept);
     setRejected(rejected);
     setFiles((cur) => (multiple ? [...cur, ...accepted] : accepted.slice(0, 1)));
     if (inputRef.current) inputRef.current.value = "";
@@ -70,7 +64,7 @@ export function FileUploadRow({
           onChange={(e) => ingest(e.target.files)}
         />
         <span className="text-[0.8125rem] text-graphite">
-          PDF / JPG / PNG{accept.some((a) => a.includes("sheet") || a === ".xlsx") ? " / XLSX" : ""} · max {maxMB} MB each
+          PDF / JPG / PNG{accept.some((a) => a.includes("sheet") || a === ".xlsx") ? " / XLSX" : ""}
         </span>
       </div>
 

@@ -8,7 +8,7 @@ const INK = "#0b0b0c";
 const EMBER = "#d64222";
 
 const SENTENCE =
-  "You don't need more insurance. You need the right coverage, built around how you actually run.";
+  "Get your Free Commercial Trucking Insurance Quotes. Compare coverage options for liability, cargo, physical damage and more. No obligation.";
 
 export function PositioningStatement() {
   const section = useRef<HTMLElement>(null);
@@ -82,7 +82,7 @@ export function PositioningStatement() {
         <p
           ref={text}
           id="positioning-heading"
-          className="mx-auto max-w-[20ch] text-center font-display text-[clamp(1.9rem,4.4vw,3.5rem)] font-medium leading-[1.12] tracking-[-0.02em] md:max-w-[24ch]"
+          className="mx-auto max-w-[34ch] text-center font-display text-[clamp(1.9rem,4.4vw,3.5rem)] font-medium leading-[1.12] tracking-[-0.02em] md:max-w-[40ch]"
         >
           {SENTENCE}
         </p>

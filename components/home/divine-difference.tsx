@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -23,11 +23,34 @@ const REEL_CLIPS = [
   "/media/difference-03-yard.mp4",
 ];
 
-function DifferenceReel({ reduced }: { reduced: boolean }) {
+function DifferenceReel({
+  reduced,
+  root,
+}: {
+  reduced: boolean;
+  root: React.RefObject<HTMLElement | null>;
+}) {
   const [index, setIndex] = useState(0);
+  // This section is well below the fold — gate the (multi-MB) video behind an
+  // IntersectionObserver so it doesn't compete with the hero for bandwidth on
+  // initial load. The still frame renders immediately as a stand-in.
+  const [inView, setInView] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  if (reduced) {
+  useEffect(() => {
+    const el = root.current;
+    if (!el || inView) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setInView(true);
+      },
+      { rootMargin: "600px 0px" },
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [root, inView]);
+
+  if (reduced || !inView) {
     return (
       <Image
         src="/media/night.jpg"
@@ -120,7 +143,7 @@ export function DivineDifference() {
       className="relative isolate overflow-hidden bg-night text-night-fg section-y"
     >
       {/* atmospheric base — night reel: highway, dispatch, yard, looping */}
-      <DifferenceReel reduced={reduced} />
+      <DifferenceReel reduced={reduced} root={root} />
       <div className="pointer-events-none absolute inset-0 -z-20 bg-night/50" />
 
       <div

@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { fontVariables } from "@/lib/fonts";
 import { SmoothScrollProvider } from "@/components/motion/smooth-scroll-provider";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -8,6 +8,12 @@ import { GridLines } from "@/components/layout/grid-lines";
 import { Toaster } from "@/components/ui/toaster";
 import { siteConfig } from "@/lib/site-config";
 import "./globals.css";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#f4f2ed",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),

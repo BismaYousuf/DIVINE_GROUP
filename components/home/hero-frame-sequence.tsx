@@ -64,6 +64,9 @@ export function HeroFrameSequence() {
     for (let i = 0; i < HERO_FRAME_COUNT; i++) {
       const img = document.createElement("img");
       img.decoding = "async";
+      // Deprioritize below the poster image, which is the actual LCP
+      // candidate — these 98 frames shouldn't compete with it for bandwidth.
+      img.fetchPriority = "low";
       img.onload = () => {
         if (!mounted) return;
         loaded += 1;

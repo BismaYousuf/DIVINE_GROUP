@@ -10,7 +10,9 @@ export const siteConfig = {
   descriptor: "Freight & commercial insurance, engineered around your operation.",
   // Falls back to the real production domain so canonical/OG/sitemap URLs are
   // never wrong even if NEXT_PUBLIC_SITE_URL isn't set in a given environment.
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://thedivinegroup.net",
+  // Trailing slash stripped so `${url}${route}` never produces a double
+  // slash regardless of how the env var was entered (e.g. in Vercel).
+  url: (process.env.NEXT_PUBLIC_SITE_URL || "https://thedivinegroup.net").replace(/\/+$/, ""),
   ogImage: "/media/og.jpg",
 
   phone: "(610) 646-5037",

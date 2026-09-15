@@ -4,12 +4,18 @@ import { CtaBand } from "@/components/page/cta-band";
 import { ContactForm } from "@/components/forms/contact-form";
 import { Reveal } from "@/components/motion/reveal";
 import { siteConfig } from "@/lib/site-config";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+
+const title = "Contact";
+const description =
+  "Reach the Divine Group team about coverage, claims or certificates of insurance.";
 
 export const metadata: Metadata = {
-  title: "Contact",
-  description:
-    "Reach the Divine Group team about coverage, claims or certificates of insurance.",
+  title,
+  description,
   alternates: { canonical: "/contact-us" },
+  openGraph: { title, description },
+  twitter: { title, description },
 };
 
 export default function Page() {
@@ -22,6 +28,12 @@ export default function Page() {
 
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Contact", path: "/contact-us" },
+        ]}
+      />
       <PageHero
         label="Contact"
         title="Talk to a specialist."

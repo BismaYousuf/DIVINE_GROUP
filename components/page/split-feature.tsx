@@ -81,7 +81,7 @@ export function SplitFeature({
       >
         <Image
           src={img}
-          alt=""
+          alt={title}
           fill
           sizes="(min-width: 1024px) 45vw, 90vw"
           className="object-cover [filter:grayscale(1)_contrast(1.05)]"

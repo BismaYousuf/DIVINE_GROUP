@@ -38,7 +38,7 @@ export function CapabilityPanel({
         <div className="cap-image relative aspect-[4/5] w-full max-w-[15rem] overflow-hidden md:max-w-[19rem]">
           <Image
             src={img}
-            alt=""
+            alt={`${label} — Divine Group`}
             fill
             sizes="(min-width: 768px) 28vw, 80vw"
             className="object-cover [filter:grayscale(1)_contrast(1.05)]"

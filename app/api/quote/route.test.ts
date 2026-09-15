@@ -109,7 +109,7 @@ describe("POST /api/quote (full mode)", () => {
   });
 
   it("rejects an oversize attachment", async () => {
-    const big = new File([new Uint8Array(2 * 1024 * 1024)], "loss-runs.pdf", {
+    const big = new File([new Uint8Array(9 * 1024 * 1024)], "loss-runs.pdf", {
       type: "application/pdf",
     });
     const res = await POST(fullReq(fullGood, [{ name: "file_lossRuns", file: big }]));

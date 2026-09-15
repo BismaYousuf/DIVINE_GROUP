@@ -4,17 +4,29 @@ import { PageHero } from "@/components/page/page-hero";
 import { CtaBand } from "@/components/page/cta-band";
 import { Reveal } from "@/components/motion/reveal";
 import { siteConfig, serviceCategories } from "@/lib/site-config";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+
+const title = "Services";
+const description =
+  "Coverage lines, specialty programs and risk management for freight and commercial operators.";
 
 export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "Coverage lines, specialty programs and risk management for freight and commercial operators.",
+  title,
+  description,
   alternates: { canonical: "/services" },
+  openGraph: { title, description },
+  twitter: { title, description },
 };
 
 export default function Page() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+        ]}
+      />
       <PageHero
         label="Services"
         title="Coverage, programs and risk management."

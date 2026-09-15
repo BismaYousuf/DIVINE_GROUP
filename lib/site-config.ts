@@ -8,7 +8,9 @@ export const siteConfig = {
   name: "Divine Group",
   legalName: "Divine Group",
   descriptor: "Freight & commercial insurance, engineered around your operation.",
-  url: "https://divinegroup.example", // CLIENT TO CONFIRM
+  // Falls back to the real production domain so canonical/OG/sitemap URLs are
+  // never wrong even if NEXT_PUBLIC_SITE_URL isn't set in a given environment.
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://thedivinegroup.net",
   ogImage: "/media/og.jpg",
 
   phone: "(610) 646-5037",

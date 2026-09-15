@@ -4,12 +4,18 @@ import { CtaBand } from "@/components/page/cta-band";
 import { SplitFeature } from "@/components/page/split-feature";
 import { Reveal } from "@/components/motion/reveal";
 import { truckingCoverageLinks, truckingPrograms } from "@/lib/site-config";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+
+const title = "Trucking Insurance";
+const description =
+  "Auto liability, motor truck cargo, physical damage and specialty trucking programs for owner-operators and fleets.";
 
 export const metadata: Metadata = {
-  title: "Trucking Insurance",
-  description:
-    "Auto liability, motor truck cargo, physical damage and specialty trucking programs for owner-operators and fleets.",
+  title,
+  description,
   alternates: { canonical: "/services/trucking-insurance" },
+  openGraph: { title, description },
+  twitter: { title, description },
 };
 
 // CLIENT TO CONFIRM — all copy on this page
@@ -35,6 +41,13 @@ const CATEGORIES = [
 export default function Page() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Services", path: "/services" },
+          { name: "Trucking Insurance", path: "/services/trucking-insurance" },
+        ]}
+      />
       <PageHero
         label="Services / Trucking Insurance"
         title="Coverage for owner-operators and fleets."

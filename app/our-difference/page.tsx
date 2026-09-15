@@ -3,12 +3,18 @@ import { PageHero } from "@/components/page/page-hero";
 import { CtaBand } from "@/components/page/cta-band";
 import { Reveal } from "@/components/motion/reveal";
 import { CountUp } from "@/components/motion/count-up";
+import { BreadcrumbJsonLd } from "@/components/seo/breadcrumb-json-ld";
+
+const title = "Our Difference";
+const description =
+  "Divine Group is built by people who run freight. Mission, approach and the ways working with us pays off.";
 
 export const metadata: Metadata = {
-  title: "Our Difference",
-  description:
-    "Divine Group is built by people who run freight. Mission, approach and the ways working with us pays off.",
+  title,
+  description,
   alternates: { canonical: "/our-difference" },
+  openGraph: { title, description },
+  twitter: { title, description },
 };
 
 // CLIENT TO CONFIRM — all copy on this page
@@ -44,6 +50,12 @@ const STATS: { value: number; suffix?: string; label: string }[] = [
 export default function Page() {
   return (
     <>
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", path: "/" },
+          { name: "Our Difference", path: "/our-difference" },
+        ]}
+      />
       <PageHero
         label="Our Difference"
         title="Built by people who run freight."

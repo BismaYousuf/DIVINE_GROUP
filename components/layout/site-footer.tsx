@@ -61,6 +61,11 @@ export function SiteFooter() {
                 </a>
               </li>
               <li>
+                <a href={siteConfig.telegramPhoneHref} className="hover:text-paper-hi">
+                  {siteConfig.telegramPhone} <span className="text-paper-hi/50">(Telegram)</span>
+                </a>
+              </li>
+              <li>
                 <a
                   href={`mailto:${siteConfig.email}`}
                   className="hover:text-paper-hi"

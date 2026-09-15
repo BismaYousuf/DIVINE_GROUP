@@ -13,7 +13,9 @@ export const siteConfig = {
 
   phone: "(610) 646-5037",
   phoneHref: "tel:+16106465037",
-  email: "submissions@divinegroupllc.com",
+  telegramPhone: "+1 321 214 7469",
+  telegramPhoneHref: "tel:+13212147469",
+  email: "submissions@thedivinegroup.net",
 
   address: {
     // CLIENT TO CONFIRM — real office address
@@ -35,9 +37,7 @@ export const siteConfig = {
   socials: [
     { label: "Facebook", href: "https://www.facebook.com/profile.php?id=61593982666177" },
     { label: "Instagram", href: "https://www.instagram.com/thedivinegroup1/" },
-    // CLIENT TO CONFIRM — real profile URLs
-    { label: "LinkedIn", href: "#" },
-    { label: "X", href: "#" },
+    { label: "Telegram", href: "https://web.telegram.org/a/#777000" },
   ],
 
   /** Coverage lines for the Home coverage band and the Services page. CLIENT TO CONFIRM. */
